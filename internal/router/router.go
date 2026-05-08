@@ -46,6 +46,11 @@ func Register(r *gin.Engine, deps Deps) {
 				th := public.NewTagHandler(deps.TagSvc)
 				pub.GET("/tags", th.List)
 			}
+			if deps.ArticleSvc != nil {
+				ah := public.NewArticleHandler(deps.ArticleSvc)
+				pub.GET("/articles", ah.List)
+				pub.GET("/articles/:slug", ah.GetBySlug)
+			}
 		}
 
 		// ---- 管理接口 ----
