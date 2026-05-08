@@ -11,12 +11,6 @@ import (
 	"github.com/yinyin/myblog/internal/repository"
 )
 
-// 分类服务错误(handler 转 errcode)
-var (
-	ErrCategoryNotFound  = errors.New("service: category not found")
-	ErrCategoryDuplicate = errors.New("service: category name or slug duplicated")
-)
-
 // CategoryService 分类服务
 type CategoryService interface {
 	Create(ctx context.Context, req dto.CategoryCreateReq) (*dto.CategoryResp, error)

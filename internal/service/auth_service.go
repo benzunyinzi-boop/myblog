@@ -13,13 +13,6 @@ import (
 	"github.com/yinyin/myblog/internal/repository"
 )
 
-// 业务层错误,handler 按类型转 errcode
-var (
-	ErrUserNotFound    = errors.New("service: user not found")
-	ErrInvalidPassword = errors.New("service: invalid password")
-	ErrUserDisabled    = errors.New("service: user disabled")
-)
-
 // AuthService 鉴权服务接口
 type AuthService interface {
 	Login(ctx context.Context, req dto.LoginReq) (*dto.LoginResp, error)

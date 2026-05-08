@@ -11,11 +11,6 @@ import (
 	"github.com/yinyin/myblog/internal/repository"
 )
 
-var (
-	ErrTagNotFound  = errors.New("service: tag not found")
-	ErrTagDuplicate = errors.New("service: tag duplicated")
-)
-
 // TagService 标签服务
 type TagService interface {
 	Create(ctx context.Context, req dto.TagCreateReq) (*dto.TagResp, error)
