@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>摄影 · myblog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .photo-hero { padding: 80px 0 48px; text-align: center; }
+    .photo-hero .kicker {
+      font-family: var(--font-mono); font-size: 12px;
+      color: var(--primary-2); letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+    .photo-hero h1 {
+      font-family: var(--font-display);
+      font-size: 52px; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .photo-hero h1 .grad {
+      background: var(--grad-primary);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .photo-hero p {
+      color: var(--text-secondary);
+      max-width: 560px; margin: 0 auto;
+      font-size: 16px;
+    }
+    .photo-filter {
+      display: flex; justify-content: center; gap: 8px;
+      padding: 20px 0 40px;
+      flex-wrap: wrap;
+    }
+    .photo-filter a {
+      font-family: var(--font-mono); font-size: 12px;
+      padding: 8px 18px;
+      border: 1px solid var(--line-regular);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      transition: all var(--dur-fast) var(--ease);
+    }
+    .photo-filter a.active {
+      color: var(--text-inverse);
+      background: var(--grad-primary);
+      border-color: transparent;
+      box-shadow: var(--glow-sm);
+    }
+    .photo-filter a:not(.active):hover {
+      color: var(--primary-2);
+      border-color: var(--primary);
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"></span>
+        <span class="brand-text">yinyin.dev</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html">首页</a></li>
+          <li><a href="./tech.html">技术</a></li>
+          <li><a href="./photography.html" class="active">摄影</a></li>
+          <li><a href="./about.html">关于</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="container photo-hero">
+    <div class="kicker">// PHOTOGRAPHY · 2019 – 2026</div>
+    <h1>光影与<span class="grad">生活</span>切片</h1>
+    <p>
+      代码之外的另一种语言。用胶片和数码,记录城市、山海与日常里那些柔软的瞬间。
+    </p>
+    <div class="photo-filter">
+      <a href="#" class="active">全部</a>
+      <a href="#">城市</a>
+      <a href="#">山海</a>
+      <a href="#">胶片</a>
+      <a href="#">人像</a>
+      <a href="#">夜色</a>
+    </div>
+  </section>
+
+  <div class="container">
+    <div class="photo-grid">
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#2E1065; --ph-c2:#8B5CF6; aspect-ratio: 3/4;"></div>
+        <div class="photo-caption">
+          雾霭 · 外滩
+          <span class="meta">Sony A7C4 · 35mm · f/1.8 · 2026.03</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#1E1B4B; --ph-c2:#6366F1; aspect-ratio: 1/1;"></div>
+        <div class="photo-caption">
+          夜归人
+          <span class="meta">Contax T2 · Portra 400 · 胶片</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#4C1D95; --ph-c2:#C4B5FD; aspect-ratio: 4/5;"></div>
+        <div class="photo-caption">
+          温柔的黄昏
+          <span class="meta">Sony A7C4 · 50mm · 2026.02</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#0E7490; --ph-c2:#22D3EE; aspect-ratio: 3/4;"></div>
+        <div class="photo-caption">
+          东海边的早晨
+          <span class="meta">Fujifilm X100V · 2026.01</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#701A75; --ph-c2:#F472B6; aspect-ratio: 4/3;"></div>
+        <div class="photo-caption">
+          霓虹街角
+          <span class="meta">Ricoh GR3 · 2025.12</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#1E1B4B; --ph-c2:#818CF8; aspect-ratio: 2/3;"></div>
+        <div class="photo-caption">
+          山间的雪
+          <span class="meta">胶片 · Mamiya 7 · 2025.12</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#312E81; --ph-c2:#A78BFA; aspect-ratio: 1/1;"></div>
+        <div class="photo-caption">
+          咖啡与书
+          <span class="meta">iPhone 15 Pro · 2025.11</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#0F172A; --ph-c2:#334155; aspect-ratio: 3/4;"></div>
+        <div class="photo-caption">
+          午夜书店
+          <span class="meta">Sony A7C4 · 35mm · 2025.11</span>
+        </div>
+      </div>
+      <div class="photo">
+        <div class="photo-placeholder"
+             style="--ph-c1:#5B21B6; --ph-c2:#EDE9FE; aspect-ratio: 4/5;"></div>
+        <div class="photo-caption">
+          晨雾与光线
+          <span class="meta">Contax G2 · Ektar 100 · 胶片</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer class="footer" style="margin-top: 96px;">
+    <div class="container footer-inner">
+      <span>© 2026 yinyin.dev &nbsp;·&nbsp; built with ♡ & Go</span>
+      <span>powered by myblog · v0.1.0-preview</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  </script>
+</body>
+</html>

@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>关于 · myblog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"></span>
+        <span class="brand-text">yinyin.dev</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html">首页</a></li>
+          <li><a href="./tech.html">技术</a></li>
+          <li><a href="./photography.html">摄影</a></li>
+          <li><a href="./about.html" class="active">关于</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- about hero -->
+  <section class="container">
+    <div class="about-hero">
+      <div class="avatar-wrap">
+        <div class="avatar">YY</div>
+      </div>
+      <div>
+        <div class="about-title">
+          <span class="ok">●</span> status: open_to_talk &nbsp;·&nbsp; /home/yinyin
+        </div>
+        <h1 class="about-name">Hi, 我是 <span class="grad">Yinyin</span>.</h1>
+        <p class="about-role">
+          一枚 <strong>十年 Go 后端工程师</strong>,专注分布式系统与工程化。
+        </p>
+        <p class="about-lead">
+          大学学的是数学,后来一头扎进了代码的世界。
+          喜欢把复杂的事情讲清楚,把粗糙的流程打磨精致。
+          工作之外偶尔写写字、煮煮咖啡、拍拍胶片。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- skills -->
+  <section class="section" style="padding-top: 48px;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">技能栈</h2>
+        <span class="section-meta">stack --list</span>
+      </div>
+
+      <div class="skill-grid">
+        <div class="skill">
+          <div class="skill-name">Go</div>
+          <div class="skill-note">10y · 主力语言</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">分布式系统</div>
+          <div class="skill-note">微服务 · 消息 · 缓存</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">MySQL / Redis</div>
+          <div class="skill-note">调优 · 高并发</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">gRPC / Kafka</div>
+          <div class="skill-note">服务间通信</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Docker / K8s</div>
+          <div class="skill-note">部署 · 运维</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">DDD</div>
+          <div class="skill-note">领域建模</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">可观测性</div>
+          <div class="skill-note">日志 · 链路 · 指标</div>
+        </div>
+        <div class="skill">
+          <div class="skill-name">Python / Vue</div>
+          <div class="skill-note">顺手能写</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- timeline -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container--narrow">
+      <div class="section-head">
+        <h2 class="section-title">经历</h2>
+        <span class="section-meta">~/career --tail</span>
+      </div>
+
+      <div class="timeline">
+        <div class="timeline-item">
+          <div class="timeline-date">2022.06 — 至今</div>
+          <div class="timeline-title">
+            高级后端工程师 · <span class="timeline-company">某大厂 · 订单中台</span>
+          </div>
+          <p class="timeline-desc">
+            负责订单核心链路,主导了从单体到微服务的迁移,QPS 提升 20 倍,p99 延迟下降 60%。
+            带 5 人小组,从 0 搭建可观测性体系。
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2019.03 — 2022.05</div>
+          <div class="timeline-title">
+            后端工程师 · <span class="timeline-company">某中厂 · 交易平台</span>
+          </div>
+          <p class="timeline-desc">
+            从 Java 切到 Go 技术栈,参与支付网关、清结算系统设计。
+            接入 5 家外部支付渠道,日均交易额过亿。
+          </p>
+        </div>
+
+        <div class="timeline-item">
+          <div class="timeline-date">2016.07 — 2019.02</div>
+          <div class="timeline-title">
+            初级工程师 → 工程师 · <span class="timeline-company">某创业公司</span>
+          </div>
+          <p class="timeline-desc">
+            职业生涯起点。什么都干:写接口、修数据、上线、救火。
+            真正学会了如何在不确定里把一件事做完。
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- contact -->
+  <section class="section" style="padding-top: 0;">
+    <div class="container container--narrow">
+      <div class="section-head">
+        <h2 class="section-title">联系</h2>
+        <span class="section-meta">ping me</span>
+      </div>
+      <div class="contact-list">
+        <a class="contact-item" href="#">✉ hi@yinyin.dev</a>
+        <a class="contact-item" href="#">◷ GitHub / @yinyin</a>
+        <a class="contact-item" href="#">◐ 微信 / yinyin_dev</a>
+        <a class="contact-item" href="#">✦ 掘金 / 小茵</a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 yinyin.dev &nbsp;·&nbsp; built with ♡ & Go</span>
+      <span>powered by myblog · v0.1.0-preview</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  </script>
+</body>
+</html>

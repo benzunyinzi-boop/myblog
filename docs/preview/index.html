@@ -1,0 +1,323 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>myblog · 紫色科技感预览</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <!-- navbar -->
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"></span>
+        <span class="brand-text">yinyin.dev</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html" class="active">首页</a></li>
+          <li><a href="./tech.html">技术</a></li>
+          <li><a href="./photography.html">摄影</a></li>
+          <li><a href="./about.html">关于</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <!-- hero -->
+  <section class="hero">
+    <div class="hero-glow"></div>
+    <div class="container hero-inner">
+      <div>
+        <div class="hero-eyebrow">
+          <span class="status-dot"></span>
+          <span>ONLINE &nbsp;·&nbsp; backend · beijing</span>
+        </div>
+        <h1>
+          构建优雅的<br />
+          <span class="grad">分布式系统</span><br />
+          记录<span class="outline">柔软</span>的思考<span class="cursor"></span>
+        </h1>
+        <p class="hero-sub">
+          十年 Go 后端经验,深耕分布式系统、高并发架构与代码美学。
+          这里是我的技术笔记、代码实验和偶尔的光影记录。
+        </p>
+        <div class="hero-cta">
+          <a href="./tech.html" class="btn btn--primary">
+            <span>//</span> explore.tech →
+          </a>
+          <a href="./about.html" class="btn">
+            <span>$</span> cat about.md
+          </a>
+        </div>
+        <div class="hero-meta">
+          <div class="metric">
+            <span class="value">128</span>
+            <span>技术笔记</span>
+          </div>
+          <div class="metric">
+            <span class="value">24</span>
+            <span>开源项目</span>
+          </div>
+          <div class="metric">
+            <span class="value">10y</span>
+            <span>后端经验</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG 科技圆环 -->
+      <div class="hero-art">
+        <svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg" fill="none">
+          <!-- 最外层点阵圆 -->
+          <g class="rot-slow" stroke="var(--line-regular)" stroke-width="1">
+            <circle cx="250" cy="250" r="240" stroke-dasharray="1 8" />
+          </g>
+
+          <!-- 刻度环 -->
+          <g class="rot-rev" stroke="var(--primary)" stroke-width="1" opacity="0.5">
+            <circle cx="250" cy="250" r="210" stroke-dasharray="3 14" />
+          </g>
+
+          <!-- 主环 + 流动虚线 -->
+          <g class="rot-slow">
+            <circle cx="250" cy="250" r="180" stroke="url(#gradMain)" stroke-width="1.5" opacity="0.9"/>
+            <circle class="dash-flow" cx="250" cy="250" r="180" stroke="var(--primary-2)" stroke-width="2" opacity="0.9" />
+          </g>
+
+          <!-- 数据节点(6 个) -->
+          <g class="rot-fast">
+            <g transform="translate(250 70)">
+              <circle r="6" fill="var(--primary-2)" />
+              <circle r="12" stroke="var(--primary)" stroke-width="1" opacity="0.6" />
+            </g>
+            <g transform="translate(406 160)">
+              <circle r="4" fill="var(--neon-cyan)" />
+              <circle r="10" stroke="var(--neon-cyan)" stroke-width="1" opacity="0.5" />
+            </g>
+            <g transform="translate(406 340)">
+              <circle r="4" fill="var(--neon-pink)" />
+              <circle r="10" stroke="var(--neon-pink)" stroke-width="1" opacity="0.5" />
+            </g>
+            <g transform="translate(250 430)">
+              <circle r="5" fill="var(--primary-2)" />
+              <circle r="11" stroke="var(--primary)" stroke-width="1" opacity="0.5" />
+            </g>
+            <g transform="translate(94 340)">
+              <circle r="4" fill="var(--neon-indigo)" />
+              <circle r="10" stroke="var(--neon-indigo)" stroke-width="1" opacity="0.5" />
+            </g>
+            <g transform="translate(94 160)">
+              <circle r="4" fill="var(--neon-cyan)" />
+              <circle r="10" stroke="var(--neon-cyan)" stroke-width="1" opacity="0.5" />
+            </g>
+          </g>
+
+          <!-- 内圈虚线 -->
+          <g class="rot-rev" stroke-dasharray="4 6">
+            <circle cx="250" cy="250" r="130" stroke="var(--neon-cyan)" stroke-width="1" opacity="0.55" />
+          </g>
+
+          <!-- 中心六边形 -->
+          <g class="breathe">
+            <polygon points="250,150 337,200 337,300 250,350 163,300 163,200"
+                     stroke="var(--primary-2)" stroke-width="1.5" opacity="0.7" />
+            <polygon points="250,180 311,215 311,285 250,320 189,285 189,215"
+                     stroke="var(--neon-cyan)" stroke-width="1" opacity="0.55" />
+          </g>
+
+          <!-- 中心核心 -->
+          <g>
+            <circle cx="250" cy="250" r="20" fill="url(#gradCore)" opacity="0.9" />
+            <circle cx="250" cy="250" r="6" fill="#fff" opacity="0.95" />
+          </g>
+
+          <!-- 十字坐标 -->
+          <g stroke="var(--line-soft)" stroke-dasharray="1 5">
+            <line x1="250" y1="0" x2="250" y2="500" />
+            <line x1="0" y1="250" x2="500" y2="250" />
+          </g>
+
+          <!-- 角标坐标 -->
+          <g font-family="JetBrains Mono" font-size="10" fill="var(--text-muted)">
+            <text x="10" y="20">X: 00.00</text>
+            <text x="430" y="20">N: 10y</text>
+            <text x="10" y="495">SYS.init</text>
+            <text x="410" y="495">v0.1.0</text>
+          </g>
+
+          <!-- 渐变定义 -->
+          <defs>
+            <linearGradient id="gradMain" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%"   stop-color="#8B5CF6" />
+              <stop offset="50%"  stop-color="#6366F1" />
+              <stop offset="100%" stop-color="#22D3EE" />
+            </linearGradient>
+            <radialGradient id="gradCore">
+              <stop offset="0%"  stop-color="#C4B5FD" />
+              <stop offset="60%" stop-color="#8B5CF6" />
+              <stop offset="100%" stop-color="#4C1D95" />
+            </radialGradient>
+          </defs>
+        </svg>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- latest posts -->
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">
+          最新文章
+          <span class="tag">~/posts</span>
+        </h2>
+        <a href="./tech.html" class="section-meta">view all →</a>
+      </div>
+
+      <div class="card-grid">
+        <article class="card">
+          <span class="card-tag card-tag--primary">Golang</span>
+          <h3 class="card-title">用 errgroup 优雅地编排并发任务</h3>
+          <p class="card-desc">
+            从 sync.WaitGroup 到 errgroup,再到 context 取消传播。一篇把并发编排讲清楚的笔记,附生产事故回溯。
+          </p>
+          <div class="card-foot">
+            <span>2026.04.28</span>
+            <span class="arrow">→</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-tag card-tag--cyan">MySQL</span>
+          <h3 class="card-title">深分页优化:从 LIMIT 10000000 说起</h3>
+          <p class="card-desc">
+            千万级数据分页查询的几种方案对比,覆盖索引、游标分页、子查询改写,实测性能提升 100x。
+          </p>
+          <div class="card-foot">
+            <span>2026.04.15</span>
+            <span class="arrow">→</span>
+          </div>
+        </article>
+
+        <article class="card">
+          <span class="card-tag card-tag--pink">Redis</span>
+          <h3 class="card-title">分布式限流:从令牌桶到 Redis Lua 原子方案</h3>
+          <p class="card-desc">
+            当流量翻了十倍,本地限流为什么会失效?对比 4 种方案,讨论精度、可用性与成本的权衡。
+          </p>
+          <div class="card-foot">
+            <span>2026.03.30</span>
+            <span class="arrow">→</span>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <div class="divider"></div>
+
+  <!-- tech stack -->
+  <section class="section" style="padding-top: 72px;">
+    <div class="container">
+      <div class="section-head">
+        <h2 class="section-title">
+          技术栈
+          <span class="tag">~/stack</span>
+        </h2>
+        <a href="./tech.html" class="section-meta">explore stacks →</a>
+      </div>
+
+      <div class="stack-grid">
+        <a href="./tech.html" class="stack" style="--stack-color: #8B5CF6;">
+          <div class="stack-head">
+            <div class="stack-icon">GO</div>
+            <div class="stack-count">posts <b>52</b></div>
+          </div>
+          <div class="stack-name">Golang</div>
+          <div class="stack-desc">goroutine、channel、微服务、性能调优</div>
+          <div class="stack-topics">
+            <span>errgroup</span><span>context</span><span>pprof</span><span>gRPC</span>
+          </div>
+        </a>
+
+        <a href="./tech.html" class="stack" style="--stack-color: #22D3EE;">
+          <div class="stack-head">
+            <div class="stack-icon">SQL</div>
+            <div class="stack-count">posts <b>28</b></div>
+          </div>
+          <div class="stack-name">MySQL</div>
+          <div class="stack-desc">索引、事务、锁、分库分表、慢查询优化</div>
+          <div class="stack-topics">
+            <span>索引</span><span>分库分表</span><span>主从</span><span>binlog</span>
+          </div>
+        </a>
+
+        <a href="./tech.html" class="stack" style="--stack-color: #F472B6;">
+          <div class="stack-head">
+            <div class="stack-icon">RDS</div>
+            <div class="stack-count">posts <b>18</b></div>
+          </div>
+          <div class="stack-name">Redis</div>
+          <div class="stack-desc">缓存一致性、分布式锁、限流、持久化</div>
+          <div class="stack-topics">
+            <span>缓存穿透</span><span>Lua</span><span>Stream</span><span>Sentinel</span>
+          </div>
+        </a>
+
+        <a href="./tech.html" class="stack" style="--stack-color: #6366F1;">
+          <div class="stack-head">
+            <div class="stack-icon">MQ</div>
+            <div class="stack-count">posts <b>16</b></div>
+          </div>
+          <div class="stack-name">Message Queue</div>
+          <div class="stack-desc">Kafka、RocketMQ、顺序消息、事务消息</div>
+          <div class="stack-topics">
+            <span>Kafka</span><span>RocketMQ</span><span>幂等</span><span>死信</span>
+          </div>
+        </a>
+
+        <a href="./tech.html" class="stack" style="--stack-color: #34D399;">
+          <div class="stack-head">
+            <div class="stack-icon">OPS</div>
+            <div class="stack-count">posts <b>14</b></div>
+          </div>
+          <div class="stack-name">运维 & 部署</div>
+          <div class="stack-desc">Docker、K8s、CI/CD、可观测性</div>
+          <div class="stack-topics">
+            <span>Docker</span><span>K8s</span><span>Nginx</span><span>Prometheus</span>
+          </div>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 yinyin.dev &nbsp;·&nbsp; built with ♡ & Go</span>
+      <span>powered by myblog · v0.1.0-preview</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  </script>
+</body>
+</html>

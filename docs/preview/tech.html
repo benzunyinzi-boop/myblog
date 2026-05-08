@@ -1,0 +1,516 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>技术 · myblog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+  <style>
+    .tech-hero { padding: 80px 0 40px; text-align: center; }
+    .tech-hero .kicker {
+      font-family: var(--font-mono); font-size: 12px;
+      color: var(--primary-2); letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    }
+    .tech-hero h1 {
+      font-family: var(--font-display);
+      font-size: 52px; letter-spacing: -0.02em;
+      margin-bottom: 16px;
+    }
+    .tech-hero h1 .grad {
+      background: var(--grad-primary);
+      -webkit-background-clip: text; background-clip: text; color: transparent;
+    }
+    .tech-hero p {
+      color: var(--text-secondary);
+      max-width: 600px; margin: 0 auto;
+      font-size: 16px;
+    }
+
+    /* 分类锚点跳转条 */
+    .tech-tabs {
+      display: flex; justify-content: center; gap: 8px;
+      padding: 20px 0; margin-bottom: 8px;
+      flex-wrap: wrap;
+    }
+    .tech-tabs a {
+      font-family: var(--font-mono); font-size: 12px;
+      padding: 8px 16px;
+      border: 1px solid var(--line-regular);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      transition: all var(--dur-fast) var(--ease);
+    }
+    .tech-tabs a:hover {
+      color: var(--primary-2);
+      border-color: var(--primary);
+      box-shadow: var(--glow-sm);
+    }
+
+    /* 分类块 */
+    .stack-section {
+      padding: 72px 0;
+      position: relative;
+    }
+    .stack-section + .stack-section { border-top: 1px solid var(--line-soft); }
+    .stack-header {
+      display: flex; align-items: center; gap: 20px;
+      margin-bottom: 36px;
+    }
+    .stack-badge {
+      width: 64px; height: 64px;
+      border: 1.5px solid var(--stack-color, var(--primary));
+      border-radius: 14px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--font-display);
+      font-weight: 700; font-size: 20px;
+      color: var(--stack-color, var(--primary));
+      background: linear-gradient(135deg, rgba(139, 92, 246, 0.08), transparent);
+      position: relative;
+      flex-shrink: 0;
+    }
+    .stack-badge::after {
+      content: "";
+      position: absolute; inset: -6px;
+      border: 1px dashed var(--stack-color, var(--primary));
+      border-radius: 20px;
+      opacity: 0.35;
+      animation: rotate 30s linear infinite;
+    }
+    .stack-header-info { flex: 1; }
+    .stack-header-name {
+      font-family: var(--font-display);
+      font-size: 32px; letter-spacing: -0.02em;
+      margin-bottom: 4px;
+      color: var(--text-primary);
+    }
+    .stack-header-desc {
+      font-size: 14px; color: var(--text-secondary);
+    }
+    .stack-count-pill {
+      font-family: var(--font-mono); font-size: 12px;
+      padding: 6px 14px;
+      border: 1px solid var(--line-regular);
+      border-radius: 20px;
+      color: var(--text-muted);
+    }
+    .stack-count-pill b { color: var(--stack-color, var(--primary-2)); }
+
+    /* 子分类 pill 区 */
+    .topic-row {
+      display: flex; flex-wrap: wrap; gap: 8px;
+      padding: 16px 0 28px;
+    }
+    .topic-pill {
+      font-family: var(--font-mono); font-size: 12px;
+      padding: 6px 14px;
+      border: 1px solid var(--line-soft);
+      border-radius: 20px;
+      color: var(--text-secondary);
+      background: rgba(139, 92, 246, 0.04);
+      transition: all var(--dur-fast) var(--ease);
+    }
+    .topic-pill:hover {
+      color: var(--stack-color, var(--primary-2));
+      border-color: var(--stack-color, var(--primary));
+      transform: translateY(-1px);
+    }
+
+    .post-list {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 14px;
+    }
+    .post-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 18px 22px;
+      border: 1px solid var(--line-soft);
+      border-radius: var(--radius-sm);
+      background: linear-gradient(160deg, rgba(26, 17, 48, 0.4), rgba(18, 11, 34, 0.2));
+      transition: all var(--dur-fast) var(--ease);
+    }
+    .post-item:hover {
+      border-color: var(--stack-color, var(--primary));
+      transform: translateX(4px);
+      box-shadow: 0 0 16px rgba(139, 92, 246, 0.18);
+    }
+    .post-item-title {
+      font-size: 14px; font-weight: 500;
+      color: var(--text-primary);
+      margin-bottom: 3px;
+    }
+    .post-item-meta {
+      font-family: var(--font-mono); font-size: 11px;
+      color: var(--text-muted);
+    }
+    .post-item-arrow {
+      color: var(--text-muted);
+      transition: all var(--dur-fast) var(--ease);
+    }
+    .post-item:hover .post-item-arrow {
+      color: var(--stack-color, var(--primary-2));
+      transform: translateX(3px);
+    }
+    @media (max-width: 720px) {
+      .post-list { grid-template-columns: 1fr; }
+      .tech-hero h1 { font-size: 36px; }
+      .stack-header-name { font-size: 26px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"></span>
+        <span class="brand-text">yinyin.dev</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html">首页</a></li>
+          <li><a href="./tech.html" class="active">技术</a></li>
+          <li><a href="./photography.html">摄影</a></li>
+          <li><a href="./about.html">关于</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <section class="container tech-hero">
+    <div class="kicker">// TECH · STACK · v1.0</div>
+    <h1>我的<span class="grad">技术</span>地图</h1>
+    <p>
+      从语言到数据库,从缓存到消息队列,再到运维部署。
+      所有踩过的坑和沉淀的思考,都在这里。
+    </p>
+  </section>
+
+  <div class="container">
+    <div class="tech-tabs">
+      <a href="#golang">#golang</a>
+      <a href="#mysql">#mysql</a>
+      <a href="#redis">#redis</a>
+      <a href="#mq">#message-queue</a>
+      <a href="#ops">#ops-deploy</a>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- Golang -->
+  <section id="golang" class="stack-section" style="--stack-color: #8B5CF6;">
+    <div class="container">
+      <div class="stack-header">
+        <div class="stack-badge">GO</div>
+        <div class="stack-header-info">
+          <h2 class="stack-header-name">Golang</h2>
+          <p class="stack-header-desc">
+            主力语言 · 并发、标准库、性能优化、工程实践
+          </p>
+        </div>
+        <div class="stack-count-pill">posts <b>52</b></div>
+      </div>
+
+      <div class="topic-row">
+        <span class="topic-pill"># goroutine</span>
+        <span class="topic-pill"># channel</span>
+        <span class="topic-pill"># context</span>
+        <span class="topic-pill"># errgroup</span>
+        <span class="topic-pill"># gRPC</span>
+        <span class="topic-pill"># gin</span>
+        <span class="topic-pill"># gorm</span>
+        <span class="topic-pill"># pprof</span>
+        <span class="topic-pill"># ants</span>
+      </div>
+
+      <div class="post-list">
+        <a href="./blog-detail.html" class="post-item">
+          <div>
+            <div class="post-item-title">用 errgroup 优雅地编排并发任务</div>
+            <div class="post-item-meta">2026.04.28 · 8 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">pprof 实战:一次 CPU 飙高的排查</div>
+            <div class="post-item-meta">2026.04.10 · 12 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Go 1.22 循环变量语义变更解读</div>
+            <div class="post-item-meta">2026.03.22 · 6 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Gin 中间件设计模式与工程化</div>
+            <div class="post-item-meta">2026.03.01 · 10 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MySQL -->
+  <section id="mysql" class="stack-section" style="--stack-color: #22D3EE;">
+    <div class="container">
+      <div class="stack-header">
+        <div class="stack-badge">SQL</div>
+        <div class="stack-header-info">
+          <h2 class="stack-header-name">MySQL</h2>
+          <p class="stack-header-desc">
+            索引设计、事务锁、分库分表、深度优化
+          </p>
+        </div>
+        <div class="stack-count-pill">posts <b>28</b></div>
+      </div>
+
+      <div class="topic-row">
+        <span class="topic-pill"># InnoDB</span>
+        <span class="topic-pill"># 索引</span>
+        <span class="topic-pill"># 事务隔离</span>
+        <span class="topic-pill"># 锁机制</span>
+        <span class="topic-pill"># 分库分表</span>
+        <span class="topic-pill"># binlog</span>
+        <span class="topic-pill"># 主从复制</span>
+        <span class="topic-pill"># 慢查询</span>
+      </div>
+
+      <div class="post-list">
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">深分页优化:从 LIMIT 10000000 说起</div>
+            <div class="post-item-meta">2026.04.15 · 15 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">InnoDB 锁机制全景图</div>
+            <div class="post-item-meta">2026.03.28 · 18 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">一次死锁事故的完整复盘</div>
+            <div class="post-item-meta">2026.02.14 · 20 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">分库分表:ShardingSphere 实战</div>
+            <div class="post-item-meta">2026.01.30 · 22 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Redis -->
+  <section id="redis" class="stack-section" style="--stack-color: #F472B6;">
+    <div class="container">
+      <div class="stack-header">
+        <div class="stack-badge">RDS</div>
+        <div class="stack-header-info">
+          <h2 class="stack-header-name">Redis</h2>
+          <p class="stack-header-desc">
+            缓存一致性、分布式锁、限流、数据结构深入
+          </p>
+        </div>
+        <div class="stack-count-pill">posts <b>18</b></div>
+      </div>
+
+      <div class="topic-row">
+        <span class="topic-pill"># 缓存穿透</span>
+        <span class="topic-pill"># 缓存雪崩</span>
+        <span class="topic-pill"># 分布式锁</span>
+        <span class="topic-pill"># Lua 脚本</span>
+        <span class="topic-pill"># Stream</span>
+        <span class="topic-pill"># Sentinel</span>
+        <span class="topic-pill"># Cluster</span>
+        <span class="topic-pill"># 持久化</span>
+      </div>
+
+      <div class="post-list">
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">分布式限流:令牌桶 + Redis Lua</div>
+            <div class="post-item-meta">2026.03.30 · 10 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">缓存一致性方案选型:谁更适合你</div>
+            <div class="post-item-meta">2026.03.05 · 14 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Redis 分布式锁的 7 个坑</div>
+            <div class="post-item-meta">2026.02.20 · 12 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">基于 Redis Stream 的轻量消息系统</div>
+            <div class="post-item-meta">2026.01.12 · 16 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- MQ -->
+  <section id="mq" class="stack-section" style="--stack-color: #6366F1;">
+    <div class="container">
+      <div class="stack-header">
+        <div class="stack-badge">MQ</div>
+        <div class="stack-header-info">
+          <h2 class="stack-header-name">Message Queue</h2>
+          <p class="stack-header-desc">
+            Kafka / RocketMQ · 顺序消息 · 事务 · 幂等
+          </p>
+        </div>
+        <div class="stack-count-pill">posts <b>16</b></div>
+      </div>
+
+      <div class="topic-row">
+        <span class="topic-pill"># Kafka</span>
+        <span class="topic-pill"># RocketMQ</span>
+        <span class="topic-pill"># 顺序消息</span>
+        <span class="topic-pill"># 事务消息</span>
+        <span class="topic-pill"># 幂等</span>
+        <span class="topic-pill"># 死信</span>
+        <span class="topic-pill"># 消息堆积</span>
+        <span class="topic-pill"># 重试策略</span>
+      </div>
+
+      <div class="post-list">
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Kafka 消息堆积应急手册</div>
+            <div class="post-item-meta">2026.04.02 · 14 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">消费幂等:从业务 ID 到 Redis SET</div>
+            <div class="post-item-meta">2026.03.18 · 10 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">RocketMQ 事务消息 vs 本地消息表</div>
+            <div class="post-item-meta">2026.02.28 · 18 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">顺序消息的 3 种实现与陷阱</div>
+            <div class="post-item-meta">2026.02.05 · 12 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 运维部署 -->
+  <section id="ops" class="stack-section" style="--stack-color: #34D399;">
+    <div class="container">
+      <div class="stack-header">
+        <div class="stack-badge">OPS</div>
+        <div class="stack-header-info">
+          <h2 class="stack-header-name">运维 & 部署</h2>
+          <p class="stack-header-desc">
+            Docker / K8s / CI / 可观测性 / 故障排查
+          </p>
+        </div>
+        <div class="stack-count-pill">posts <b>14</b></div>
+      </div>
+
+      <div class="topic-row">
+        <span class="topic-pill"># Docker</span>
+        <span class="topic-pill"># Kubernetes</span>
+        <span class="topic-pill"># Nginx</span>
+        <span class="topic-pill"># CI/CD</span>
+        <span class="topic-pill"># Prometheus</span>
+        <span class="topic-pill"># Grafana</span>
+        <span class="topic-pill"># Jaeger</span>
+        <span class="topic-pill"># 故障排查</span>
+      </div>
+
+      <div class="post-list">
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Go 服务 Docker 镜像瘦身三连</div>
+            <div class="post-item-meta">2026.04.08 · 8 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">K8s HPA 实战:基于自定义指标扩缩容</div>
+            <div class="post-item-meta">2026.03.24 · 16 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">Nginx 反代 Go 服务的 5 个细节</div>
+            <div class="post-item-meta">2026.02.12 · 10 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+        <a href="#" class="post-item">
+          <div>
+            <div class="post-item-title">从零搭建可观测性:Prometheus + Jaeger + Loki</div>
+            <div class="post-item-meta">2026.01.20 · 22 min</div>
+          </div>
+          <span class="post-item-arrow">→</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 yinyin.dev &nbsp;·&nbsp; built with ♡ & Go</span>
+      <span>powered by myblog · v0.1.0-preview</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  </script>
+</body>
+</html>

@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>用 errgroup 优雅地编排并发任务 · myblog</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="nav">
+    <div class="container nav-inner">
+      <a href="./index.html" class="brand">
+        <span class="brand-logo"></span>
+        <span class="brand-text">yinyin.dev</span>
+      </a>
+      <nav>
+        <ul class="nav-links">
+          <li><a href="./index.html">首页</a></li>
+          <li><a href="./tech.html" class="active">技术</a></li>
+          <li><a href="./photography.html">摄影</a></li>
+          <li><a href="./about.html">关于</a></li>
+        </ul>
+      </nav>
+      <div class="nav-actions">
+        <button class="theme-toggle" onclick="toggleTheme()" aria-label="切换主题">◐</button>
+      </div>
+    </div>
+  </header>
+
+  <article class="container">
+    <header class="article-head">
+      <div class="article-cate">CATEGORY / GO · 并发</div>
+      <h1 class="article-title">用 errgroup 优雅地编排并发任务</h1>
+      <div class="article-meta">
+        <span>● 2026.04.28</span>
+        <span>◷ 阅读 8 分钟</span>
+        <span>≡ 2,431 字</span>
+        <span>#go #concurrency #errgroup</span>
+      </div>
+    </header>
+
+    <div class="article-layout">
+      <!-- 正文 -->
+      <div class="article-body">
+        <p>
+          在 Go 里写并发,<code>goroutine + channel</code> 是基本功;但一旦任务数变多、彼此又有依赖,代码很容易就堆成一锅
+          <code>sync.WaitGroup</code> 加一堆 <code>error channel</code> 的大杂烩。
+          今天聊聊我日常最常用的一个工具:<strong>golang.org/x/sync/errgroup</strong>。
+        </p>
+
+        <blockquote>
+          errgroup 不是魔法,它只是把 WaitGroup、error 汇聚、context 取消这三件事封在了一起。
+          理解它,也就理解了并发编排中最常见的三种诉求。
+        </blockquote>
+
+        <h2>WaitGroup 的痛点</h2>
+        <p>
+          最早我们都是这样写的:起几个 goroutine,用 <code>sync.WaitGroup</code> 等它们跑完,
+          再用一个 <code>error channel</code> 把错误收集起来。问题是,一旦其中一个失败了,
+          我们往往希望其他任务也立刻停下来,但 WaitGroup 本身不提供取消能力。
+        </p>
+
+        <h3>典型的"老代码"</h3>
+        <pre data-file="// legacy_concurrent.go"><code><span class="k">func</span> <span class="n">FetchAll</span>(ctx <span class="t">context.Context</span>) <span class="t">error</span> {
+    <span class="k">var</span> wg <span class="t">sync.WaitGroup</span>
+    errCh := <span class="k">make</span>(<span class="k">chan</span> <span class="t">error</span>, <span class="s">3</span>)
+
+    <span class="k">for</span> _, id := <span class="k">range</span> ids {
+        wg.Add(<span class="s">1</span>)
+        <span class="k">go</span> <span class="k">func</span>(id <span class="t">int</span>) {
+            <span class="k">defer</span> wg.Done()
+            <span class="k">if</span> err := doFetch(ctx, id); err != <span class="k">nil</span> {
+                errCh <- err
+            }
+        }(id)
+    }
+    wg.Wait()
+    <span class="k">close</span>(errCh)
+
+    <span class="c">// 第一个错误抛出去,其余吞掉</span>
+    <span class="k">for</span> err := <span class="k">range</span> errCh {
+        <span class="k">if</span> err != <span class="k">nil</span> { <span class="k">return</span> err }
+    }
+    <span class="k">return</span> <span class="k">nil</span>
+}</code></pre>
+
+        <p>
+          看起来没什么大问题,直到线上某一天 <code>doFetch</code> 某个请求挂在远程不返回,
+          其他 2 个子任务早就跑完了,但 <code>wg.Wait()</code> 仍在苦苦等待。
+          这是典型的"缺少取消联动"。
+        </p>
+
+        <h2>errgroup 的做法</h2>
+        <p>
+          <code>errgroup.WithContext</code> 返回一个 <code>group</code> 和一个派生的 <code>ctx</code>。
+          只要有任何一个 <code>Go()</code> 返回了非 nil 错误,派生 ctx 就会被取消,
+          其他 goroutine 只要正确尊重 ctx,就能被快速打断。
+        </p>
+
+        <pre data-file="// errgroup_example.go"><code><span class="k">import</span> <span class="s">"golang.org/x/sync/errgroup"</span>
+
+<span class="k">func</span> <span class="n">FetchAll</span>(ctx <span class="t">context.Context</span>) <span class="t">error</span> {
+    g, gctx := errgroup.WithContext(ctx)
+    <span class="k">for</span> _, id := <span class="k">range</span> ids {
+        id := id <span class="c">// 捕获变量</span>
+        g.Go(<span class="k">func</span>() <span class="t">error</span> {
+            <span class="k">return</span> doFetch(gctx, id)
+        })
+    }
+    <span class="k">return</span> g.Wait()
+}</code></pre>
+
+        <p>
+          代码从 20 行瘦到 8 行,并且自动获得了:
+        </p>
+        <ul>
+          <li>任意失败即取消的联动;</li>
+          <li><code>g.Wait()</code> 返回第一个非 nil 错误;</li>
+          <li>对 <code>doFetch</code> 没有侵入 —— 它只要是一个"返回 error 的函数"即可。</li>
+        </ul>
+
+        <h2>生产事故回溯</h2>
+        <p>
+          去年有一次线上 p99 延迟突然飙高,排查发现是一个"聚合接口"里,
+          三路并发调用其中一路超时了,但 WaitGroup 没取消另两路,
+          另两路在 5s 后才各自超时返回 —— 一次请求因此多消耗了 4s 时间。
+          切换到 errgroup 后,第一个超时后其余 goroutine 跟着 ctx 取消,
+          p99 从 6.2s 降到 1.1s。
+        </p>
+
+        <blockquote>
+          这件事的教训是:<strong>不要让"并发"变成"并发等待"</strong>。
+          任何长生命周期的 goroutine 都必须有一条明确的退出通路。
+        </blockquote>
+
+        <h2>进阶:限制并发数</h2>
+        <p>
+          errgroup 1.5+ 支持 <code>SetLimit</code>,可以在不引入 semaphore 的前提下限制并发:
+        </p>
+
+        <pre data-file="// errgroup_with_limit.go"><code>g, gctx := errgroup.WithContext(ctx)
+g.SetLimit(<span class="s">16</span>) <span class="c">// 最多 16 个同时在跑</span>
+
+<span class="k">for</span> _, url := <span class="k">range</span> urls {
+    url := url
+    g.Go(<span class="k">func</span>() <span class="t">error</span> {
+        <span class="k">return</span> crawl(gctx, url)
+    })
+}
+<span class="k">return</span> g.Wait()</code></pre>
+
+        <h2>小结</h2>
+        <p>
+          errgroup 并不能解决所有并发问题,但它把 90% 的"并发 + 错误 + 取消"场景封装得足够好。
+          对于更复杂的场景,比如"部分任务失败可以容忍"、"需要分组重试",
+          你依然需要自己动手造轮子 —— 但先把 errgroup 用熟,再决定什么时候该跳出来。
+        </p>
+
+        <p style="margin-top:48px; color: var(--text-muted); font-family: var(--font-mono); font-size: 13px;">
+          — 本文首发于 yinyin.dev,欢迎转载,注明出处即可。
+        </p>
+      </div>
+
+      <!-- TOC -->
+      <aside class="toc">
+        <div class="toc-title">ON THIS PAGE</div>
+        <ul>
+          <li><a href="#">WaitGroup 的痛点</a></li>
+          <li class="toc-h3"><a href="#">典型的"老代码"</a></li>
+          <li><a href="#">errgroup 的做法</a></li>
+          <li><a href="#">生产事故回溯</a></li>
+          <li><a href="#">进阶:限制并发数</a></li>
+          <li><a href="#">小结</a></li>
+        </ul>
+      </aside>
+    </div>
+  </article>
+
+  <footer class="footer">
+    <div class="container footer-inner">
+      <span>© 2026 yinyin.dev &nbsp;·&nbsp; built with ♡ & Go</span>
+      <span>powered by myblog · v0.1.0-preview</span>
+    </div>
+  </footer>
+
+  <script>
+    function toggleTheme() {
+      const html = document.documentElement;
+      const cur = html.getAttribute('data-theme');
+      const next = cur === 'light' ? 'dark' : 'light';
+      html.setAttribute('data-theme', next);
+      localStorage.setItem('theme', next);
+    }
+    const saved = localStorage.getItem('theme');
+    if (saved) document.documentElement.setAttribute('data-theme', saved);
+  </script>
+</body>
+</html>

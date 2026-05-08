@@ -1,0 +1,9 @@
+-- 000001_init_schema.down.sql
+SET FOREIGN_KEY_CHECKS = 0;
+DROP TABLE IF EXISTS `profiles`;
+DROP TABLE IF EXISTS `article_tags`;
+DROP TABLE IF EXISTS `articles`;
+DROP TABLE IF EXISTS `tags`;
+DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `users`;
+SET FOREIGN_KEY_CHECKS = 1;
