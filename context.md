@@ -37,8 +37,9 @@
 - [x] 整体实现计划已成型并用户批准
 - [x] 视觉预览 5 张 HTML 已交付并被用户认可
 - [x] M1 后端骨架完成
-- [x] **M2 完成**:MySQL/Redis 接入、migration(6 张表)、users+JWT 登录、admin ping 受保护、种子工具、端到端 7 点验证通过
-- [ ] git 未 init(等用户确认后再建 repo)
+- [x] M2 完成:MySQL/Redis 接入、migration(6 张表)、users+JWT 登录、admin ping 受保护、种子工具
+- [x] **M3 完成**:Category/Tag/Article/Profile/Upload 全链路,API 文档,验证计划
+- [x] git 已 init 并推送到 GitHub(benzunyinzi-boop/myblog)
 
 ## 环境约定(本地开发,2026-05-08)
 
@@ -69,22 +70,37 @@
 - 自定义 `zapWriter` 实现 `gormlogger.Writer.Printf`,让 GORM 的慢查询/错误进入 zap 流
 - 开启 `IgnoreRecordNotFoundError`,避免把"查不到"当错误打
 
+### D8 · service 层错误统一管理(2026-05-08)
+- 将散落在各 service 文件中的错误定义统一收拢到 `internal/service/errcode.go`
+- 便于查看和维护,为后续扩展预留空间
+- handler 层按类型映射到 `pkg/errcode` 的 HTTP 错误码
+
+### D9 · Article.PublishedAt 类型修复(2026-05-08)
+- 问题:migration 定义 `DATETIME(3)`,Go 用 `*int64`,导致 MySQL 1292 错误
+- 修复:改用 `*time.Time`,GORM 自动转换;dto 保持 `*int64` 给前端
+- 教训:model 字段类型要和 migration 定义匹配
+
+### D10 · 小步提交节奏(2026-05-08)
+- 用户要求"每一步都要提交",保持小步快跑
+- 每个功能模块独立提交:model → repo → service → handler → 验证
+- 好处:可追溯、可回滚、commit 历史清晰
+
 ## 交接下一步
 
-下个会话如果用户说"继续",进入 **M3 · 核心 API / 前台**。两个推进方向可选:
+下个会话如果用户说"继续",进入 **M4 · 前端开发** 或 **M5 · 部署**。
 
-**路线 A(推荐):后端继续深挖 M3 后半段的核心 API**
-1. 文章 CRUD(repository + service + admin handler)
-2. 分类/标签管理
-3. 公开接口:文章列表(分页+分类+标签+关键词)、详情(含 Redis 缓存)
-4. Profile(关于我)GET/PUT
-5. 图片上传(本地 uploads/)
-
-**路线 B:先起 Vue 3 前端脚手架,把预览页迁到 web/**
-1. Vite + Vue 3 + TS,接 Naive UI
+**M4 · 前端开发(推荐)**
+1. Vite + Vue 3 + TS + Naive UI 脚手架
 2. 把 `docs/preview/` 的 CSS 迁到 `web/src/styles/`
-3. 打通 /login 页,接上 M2 的 /admin/auth/login
+3. 对接 M3 API:登录 → 文章列表 → 文章详情 → 关于我
+4. 管理后台:文章 CRUD + 分类标签管理 + 图片上传
 
-如果用户不指定,默认走 A(先让后端完整,再做前端对接才有数据)。
+**M5 · 部署**
+1. Dockerfile + docker-compose(MySQL/Redis/myblog)
+2. Nginx 反向代理 + 静态文件服务
+3. 域名 + HTTPS(Let's Encrypt)
+4. 阿里云/腾讯云 VPS 部署
+
+如果用户不指定,默认走 M4(前端开发,让整个博客能跑起来)。
 
 > 本项目使用 Claude Code 协作,用户是十年 Go 后端出身女生开发者,视觉品味偏紫色科技感。
