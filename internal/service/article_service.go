@@ -66,7 +66,7 @@ func (s *articleService) Create(ctx context.Context, authorID uint64, req dto.Ar
 		Status:     status,
 	}
 	if status == model.ArticleStatusPublished {
-		now := time.Now().Unix()
+		now := time.Now()
 		a.PublishedAt = &now
 	}
 
@@ -216,7 +216,7 @@ func (s *articleService) Publish(ctx context.Context, id uint64) (*dto.ArticleDe
 	if a.IsPublished() {
 		return nil, ErrArticleConflict
 	}
-	now := time.Now().Unix()
+	now := time.Now()
 	if err := s.articles.Update(ctx, a, map[string]any{
 		"status":       model.ArticleStatusPublished,
 		"published_at": now,
@@ -304,6 +304,11 @@ func (s *articleService) buildSummary(ctx context.Context, a *model.Article) (*d
 	for _, t := range tags {
 		tagResps = append(tagResps, dto.TagResp{ID: t.ID, Name: t.Name, Slug: t.Slug})
 	}
+	var publishedAt *int64
+	if a.PublishedAt != nil {
+		ts := a.PublishedAt.Unix()
+		publishedAt = &ts
+	}
 	return &dto.ArticleSummaryResp{
 		ID:          a.ID,
 		Title:       a.Title,
@@ -314,7 +319,7 @@ func (s *articleService) buildSummary(ctx context.Context, a *model.Article) (*d
 		AuthorID:    a.AuthorID,
 		Status:      a.Status,
 		ViewCount:   a.ViewCount,
-		PublishedAt: a.PublishedAt,
+		PublishedAt: publishedAt,
 		CreatedAt:   a.CreatedAt.Unix(),
 		Tags:        tagResps,
 	}, nil

@@ -48,7 +48,7 @@ type ArticleSummaryResp struct {
 	AuthorID    uint64    `json:"author_id"`
 	Status      string    `json:"status"`
 	ViewCount   int       `json:"view_count"`
-	PublishedAt *int64    `json:"published_at,omitempty"`
+	PublishedAt *int64    `json:"published_at,omitempty"` // unix 秒,前端友好
 	CreatedAt   int64     `json:"created_at"`
 	Tags        []TagResp `json:"tags"`
 }
