@@ -16,6 +16,7 @@ import (
 	"github.com/yinyin/myblog/internal/config"
 	myjwt "github.com/yinyin/myblog/internal/pkg/jwt"
 	"github.com/yinyin/myblog/internal/pkg/logger"
+	"github.com/yinyin/myblog/internal/pkg/uploader"
 	"github.com/yinyin/myblog/internal/pkg/validation"
 	"github.com/yinyin/myblog/internal/repository"
 	"github.com/yinyin/myblog/internal/router"
@@ -94,6 +95,12 @@ func Run(cfgPath, version string) error {
 	articleSvc := service.NewArticleService(articleRepo, categoryRepo, tagRepo)
 	profileSvc := service.NewProfileService(profileRepo)
 
+	// 文件上传器(本地实现)
+	fileUploader, err := uploader.NewLocalUploader("./uploads", "/uploads")
+	if err != nil {
+		logger.L().Fatal("init uploader", zap.Error(err))
+	}
+
 	engine := BuildEngine(cfg, version, router.Deps{
 		Signer:      signer,
 		AuthService: authSvc,
@@ -101,6 +108,7 @@ func Run(cfgPath, version string) error {
 		TagSvc:      tagSvc,
 		ArticleSvc:  articleSvc,
 		ProfileSvc:  profileSvc,
+		Uploader:    fileUploader,
 	})
 
 	srv := &http.Server{

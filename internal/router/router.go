@@ -7,6 +7,7 @@ import (
 	"github.com/yinyin/myblog/internal/handler/public"
 	"github.com/yinyin/myblog/internal/middleware"
 	myjwt "github.com/yinyin/myblog/internal/pkg/jwt"
+	"github.com/yinyin/myblog/internal/pkg/uploader"
 	"github.com/yinyin/myblog/internal/service"
 )
 
@@ -20,6 +21,7 @@ type Deps struct {
 	TagSvc      service.TagService      // 可为空,仅在启用 tag 路由时需要
 	ArticleSvc  service.ArticleService  // 可为空,仅在启用 article 路由时需要
 	ProfileSvc  service.ProfileService  // 可为空,仅在启用 profile 路由时需要
+	Uploader    uploader.Uploader       // 可为空,仅在启用 upload 路由时需要
 }
 
 // Register 挂载所有路由与全局中间件
@@ -30,6 +32,9 @@ func Register(r *gin.Engine, deps Deps) {
 		middleware.CORS(),
 		middleware.AccessLog(),
 	)
+
+	// 静态文件服务(上传的图片等)
+	r.Static("/uploads", "./uploads")
 
 	health := public.NewHealthHandler(deps.ServiceName, deps.Version)
 
@@ -96,6 +101,10 @@ func Register(r *gin.Engine, deps Deps) {
 				if deps.ProfileSvc != nil {
 					ph := admin.NewProfileHandler(deps.ProfileSvc)
 					protected.PUT("/profile", ph.Update)
+				}
+				if deps.Uploader != nil {
+					uh := admin.NewUploadHandler(deps.Uploader)
+					protected.POST("/uploads", uh.Upload)
 				}
 			}
 		}
