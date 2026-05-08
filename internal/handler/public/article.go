@@ -1,7 +1,9 @@
 package public
 
 import (
+	"context"
 	"errors"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/yinyin/myblog/internal/dto"
@@ -62,9 +64,19 @@ func (h *ArticleHandler) GetBySlug(c *gin.Context) {
 		response.Fail(c, errcode.ErrArticleNotFound, "")
 		return
 	}
-	// 异步增加浏览计数(不阻塞响应,失败也不影响)
+	// 异步增加浏览计数(用独立 ctx,不跟随请求 ctx 被 cancel;失败不影响响应)
+	articleID := detail.ID
+	tid := logger.TraceIDFrom(c.Request.Context())
 	go func() {
-		_ = h.svc.IncrView(c.Request.Context(), detail.ID)
+		ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
+		defer cancel()
+		if tid != "" {
+			ctx = logger.WithTraceID(ctx, tid)
+		}
+		if err := h.svc.IncrView(ctx, articleID); err != nil {
+			logger.C(ctx).Warn("incr view failed",
+				zap.Uint64("article_id", articleID), zap.Error(err))
+		}
 	}()
 	response.OK(c, detail)
 }
