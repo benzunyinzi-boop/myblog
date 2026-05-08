@@ -18,6 +18,7 @@ type Deps struct {
 	AuthService service.AuthService     // 可为空,仅在启用 /admin/auth 时需要
 	CategorySvc service.CategoryService // 可为空,仅在启用 category 路由时需要
 	TagSvc      service.TagService      // 可为空,仅在启用 tag 路由时需要
+	ArticleSvc  service.ArticleService  // 可为空,仅在启用 article 路由时需要
 }
 
 // Register 挂载所有路由与全局中间件
@@ -71,6 +72,16 @@ func Register(r *gin.Engine, deps Deps) {
 					protected.GET("/tags", th.List)
 					protected.POST("/tags", th.Create)
 					protected.DELETE("/tags/:id", th.Delete)
+				}
+				if deps.ArticleSvc != nil {
+					ah := admin.NewArticleHandler(deps.ArticleSvc)
+					protected.GET("/articles", ah.List)
+					protected.POST("/articles", ah.Create)
+					protected.GET("/articles/:id", ah.Get)
+					protected.PUT("/articles/:id", ah.Update)
+					protected.DELETE("/articles/:id", ah.Delete)
+					protected.POST("/articles/:id/publish", ah.Publish)
+					protected.POST("/articles/:id/unpublish", ah.Unpublish)
 				}
 			}
 		}

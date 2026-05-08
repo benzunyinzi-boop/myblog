@@ -86,15 +86,18 @@ func Run(cfgPath, version string) error {
 	userRepo := repository.NewUserRepo(db)
 	categoryRepo := repository.NewCategoryRepo(db)
 	tagRepo := repository.NewTagRepo(db)
+	articleRepo := repository.NewArticleRepo(db)
 	authSvc := service.NewAuthService(userRepo, signer)
 	categorySvc := service.NewCategoryService(categoryRepo)
 	tagSvc := service.NewTagService(tagRepo)
+	articleSvc := service.NewArticleService(articleRepo, categoryRepo, tagRepo)
 
 	engine := BuildEngine(cfg, version, router.Deps{
 		Signer:      signer,
 		AuthService: authSvc,
 		CategorySvc: categorySvc,
 		TagSvc:      tagSvc,
+		ArticleSvc:  articleSvc,
 	})
 
 	srv := &http.Server{
