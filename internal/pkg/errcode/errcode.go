@@ -30,6 +30,18 @@ const (
 	ErrUserDisabled    Code = 30003 // 账号被禁用
 	ErrTokenExpired    Code = 30004 // token 过期
 	ErrTokenInvalid    Code = 30005 // token 无效
+
+	// 分类/标签 4xxxx
+	ErrCategoryNotFound   Code = 40001 // 分类不存在
+	ErrCategoryDuplicate  Code = 40002 // 分类名或 slug 已存在
+	ErrCategoryInUse      Code = 40003 // 分类被文章引用,不能删除
+	ErrTagNotFound        Code = 40101 // 标签不存在
+	ErrTagDuplicate       Code = 40102 // 标签名或 slug 已存在
+
+	// 文章 2xxxx
+	ErrArticleNotFound  Code = 20001 // 文章不存在
+	ErrArticleDuplicate Code = 20002 // 文章 slug 已存在
+	ErrArticleConflict  Code = 20003 // 状态冲突(如重复发布)
 )
 
 // Message 默认错误信息(handler 可以覆盖)
@@ -48,6 +60,16 @@ var Message = map[Code]string{
 	ErrUserDisabled:    "账号已被禁用",
 	ErrTokenExpired:    "登录已过期,请重新登录",
 	ErrTokenInvalid:    "登录凭证无效",
+
+	ErrCategoryNotFound:  "分类不存在",
+	ErrCategoryDuplicate: "分类名或 slug 已存在",
+	ErrCategoryInUse:     "分类正在被文章使用,无法删除",
+	ErrTagNotFound:       "标签不存在",
+	ErrTagDuplicate:      "标签名或 slug 已存在",
+
+	ErrArticleNotFound:  "文章不存在",
+	ErrArticleDuplicate: "文章 slug 已存在",
+	ErrArticleConflict:  "文章状态不允许此操作",
 }
 
 // MsgOf 取默认 message,未登记时返回 "unknown".

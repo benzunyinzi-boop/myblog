@@ -16,6 +16,7 @@ import (
 	"github.com/yinyin/myblog/internal/config"
 	myjwt "github.com/yinyin/myblog/internal/pkg/jwt"
 	"github.com/yinyin/myblog/internal/pkg/logger"
+	"github.com/yinyin/myblog/internal/pkg/validation"
 	"github.com/yinyin/myblog/internal/repository"
 	"github.com/yinyin/myblog/internal/router"
 	"github.com/yinyin/myblog/internal/service"
@@ -34,6 +35,11 @@ func BuildEngine(cfg *config.Config, version string, deps router.Deps) *gin.Engi
 		gin.SetMode(cfg.Server.Mode)
 	default:
 		gin.SetMode(gin.DebugMode)
+	}
+
+	// 注册项目级自定义 validator(slug 等)
+	if err := validation.Register(); err != nil {
+		logger.L().Warn("register validation failed", zap.Error(err))
 	}
 
 	deps.ServiceName = ServiceName
@@ -78,11 +84,17 @@ func Run(cfgPath, version string) error {
 	}
 
 	userRepo := repository.NewUserRepo(db)
+	categoryRepo := repository.NewCategoryRepo(db)
+	tagRepo := repository.NewTagRepo(db)
 	authSvc := service.NewAuthService(userRepo, signer)
+	categorySvc := service.NewCategoryService(categoryRepo)
+	tagSvc := service.NewTagService(tagRepo)
 
 	engine := BuildEngine(cfg, version, router.Deps{
 		Signer:      signer,
 		AuthService: authSvc,
+		CategorySvc: categorySvc,
+		TagSvc:      tagSvc,
 	})
 
 	srv := &http.Server{

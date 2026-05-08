@@ -14,13 +14,14 @@ import (
 type Deps struct {
 	ServiceName string
 	Version     string
-	Signer      *myjwt.Signer       // 可为空,仅在启用鉴权路由时需要
-	AuthService service.AuthService // 可为空,仅在启用 /admin/auth 时需要
+	Signer      *myjwt.Signer           // 可为空,仅在启用鉴权路由时需要
+	AuthService service.AuthService     // 可为空,仅在启用 /admin/auth 时需要
+	CategorySvc service.CategoryService // 可为空,仅在启用 category 路由时需要
+	TagSvc      service.TagService      // 可为空,仅在启用 tag 路由时需要
 }
 
 // Register 挂载所有路由与全局中间件
 func Register(r *gin.Engine, deps Deps) {
-	// 全局中间件(顺序:trace → recover → cors → accesslog)
 	r.Use(
 		middleware.TraceID(),
 		middleware.Recover(),
@@ -36,6 +37,14 @@ func Register(r *gin.Engine, deps Deps) {
 		pub := api.Group("/public")
 		{
 			pub.GET("/health", health.Check)
+			if deps.CategorySvc != nil {
+				ch := public.NewCategoryHandler(deps.CategorySvc)
+				pub.GET("/categories", ch.List)
+			}
+			if deps.TagSvc != nil {
+				th := public.NewTagHandler(deps.TagSvc)
+				pub.GET("/tags", th.List)
+			}
 		}
 
 		// ---- 管理接口 ----
@@ -49,6 +58,20 @@ func Register(r *gin.Engine, deps Deps) {
 				protected := adm.Group("")
 				protected.Use(middleware.JWTAuth(deps.Signer))
 				protected.GET("/ping", admin.Ping)
+
+				if deps.CategorySvc != nil {
+					ch := admin.NewCategoryHandler(deps.CategorySvc)
+					protected.GET("/categories", ch.List)
+					protected.POST("/categories", ch.Create)
+					protected.PUT("/categories/:id", ch.Update)
+					protected.DELETE("/categories/:id", ch.Delete)
+				}
+				if deps.TagSvc != nil {
+					th := admin.NewTagHandler(deps.TagSvc)
+					protected.GET("/tags", th.List)
+					protected.POST("/tags", th.Create)
+					protected.DELETE("/tags/:id", th.Delete)
+				}
 			}
 		}
 	}
