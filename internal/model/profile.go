@@ -1,16 +1,16 @@
 package model
 
-// Profile 个人资料(关于我)
+// Profile 个人资料(关于我)。profiles 表只保留一条记录(id=1)。
 type Profile struct {
 	BaseModel
-	Name        string `gorm:"type:varchar(100);not null" json:"name"`
-	Bio         string `gorm:"type:text;not null"         json:"bio"`
-	Avatar      string `gorm:"type:varchar(255);not null" json:"avatar"`
-	Email       string `gorm:"type:varchar(100);not null" json:"email"`
-	GitHub      string `gorm:"type:varchar(255);not null" json:"github"`
-	Twitter     string `gorm:"type:varchar(255);not null" json:"twitter"`
-	LinkedIn    string `gorm:"type:varchar(255);not null" json:"linkedin"`
-	Website     string `gorm:"type:varchar(255);not null" json:"website"`
+	Name     string `gorm:"column:name;type:varchar(100);not null;default:''"     json:"name"`
+	Bio      string `gorm:"column:bio;type:text;not null"                         json:"bio"`
+	Avatar   string `gorm:"column:avatar;type:varchar(255);not null;default:''"   json:"avatar"`
+	Email    string `gorm:"column:email;type:varchar(100);not null;default:''"    json:"email"`
+	GitHub   string `gorm:"column:github;type:varchar(255);not null;default:''"   json:"github"`
+	Twitter  string `gorm:"column:twitter;type:varchar(255);not null;default:''"  json:"twitter"`
+	LinkedIn string `gorm:"column:linkedin;type:varchar(255);not null;default:''" json:"linkedin"`
+	Website  string `gorm:"column:website;type:varchar(255);not null;default:''"  json:"website"`
 }
 
 // TableName GORM 表名

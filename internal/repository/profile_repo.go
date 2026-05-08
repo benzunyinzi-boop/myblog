@@ -4,16 +4,16 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"time"
 
 	"github.com/yinyin/myblog/internal/model"
 	"gorm.io/gorm"
+	"gorm.io/gorm/clause"
 )
 
-// ProfileRepo 个人资料仓储
+// ProfileRepo 个人资料仓储(单条记录,id=1)
 type ProfileRepo interface {
-	// Get 获取唯一的 profile 记录(不存在返回 ErrNotFound)
 	Get(ctx context.Context) (*model.Profile, error)
-	// Upsert 更新或插入(profiles 表只有一条记录,id=1)
 	Upsert(ctx context.Context, p *model.Profile) error
 }
 
@@ -24,7 +24,6 @@ func NewProfileRepo(db *gorm.DB) ProfileRepo { return &profileRepo{db: db} }
 
 func (r *profileRepo) Get(ctx context.Context) (*model.Profile, error) {
 	var p model.Profile
-	// profiles 表只有一条记录,id=1
 	if err := r.db.WithContext(ctx).First(&p, 1).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			return nil, ErrNotFound
@@ -34,11 +33,28 @@ func (r *profileRepo) Get(ctx context.Context) (*model.Profile, error) {
 	return &p, nil
 }
 
+// Upsert 插入或更新唯一的 profile 记录(id=1)。
+// 使用 ON DUPLICATE KEY UPDATE,明确更新字段,避免 Save 带上
+// 零值的 created_at 在严格模式下报错。
 func (r *profileRepo) Upsert(ctx context.Context, p *model.Profile) error {
-	// 强制 id=1,确保只有一条记录
 	p.ID = 1
-	// Save 会根据主键判断是 INSERT 还是 UPDATE
-	if err := r.db.WithContext(ctx).Save(p).Error; err != nil {
+	now := time.Now()
+	p.UpdatedAt = now
+	if p.CreatedAt.IsZero() {
+		p.CreatedAt = now
+	}
+
+	err := r.db.WithContext(ctx).
+		Clauses(clause.OnConflict{
+			Columns: []clause.Column{{Name: "id"}},
+			DoUpdates: clause.AssignmentColumns([]string{
+				"name", "bio", "avatar", "email",
+				"github", "twitter", "linkedin", "website",
+				"updated_at",
+			}),
+		}).
+		Create(p).Error
+	if err != nil {
 		return fmt.Errorf("upsert profile: %w", err)
 	}
 	return nil
