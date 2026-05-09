@@ -32,13 +32,14 @@
 - 用户反馈"紫色加上科技感",浅色底和紫色的对比不够通透,改为深色优先
 - 保留浅色变量作为 `[data-theme="light"]`,右上 `◐` 可切
 
-## 当前状态(2026-05-08)
+## 当前状态(2026-05-09)
 
 - [x] 整体实现计划已成型并用户批准
 - [x] 视觉预览 5 张 HTML 已交付并被用户认可
 - [x] M1 后端骨架完成
 - [x] M2 完成:MySQL/Redis 接入、migration(6 张表)、users+JWT 登录、admin ping 受保护、种子工具
-- [x] **M3 完成**:Category/Tag/Article/Profile/Upload 全链路,API 文档,验证计划
+- [x] M3 完成:Category/Tag/Article/Profile/Upload 全链路,API 文档,验证计划
+- [x] **M3 端到端验证 25/25 全绿**(`test/e2e-verify.sh`)
 - [x] git 已 init 并推送到 GitHub(benzunyinzi-boop/myblog)
 
 ## 环境约定(本地开发,2026-05-08)
@@ -85,22 +86,43 @@
 - 每个功能模块独立提交:model → repo → service → handler → 验证
 - 好处:可追溯、可回滚、commit 历史清晰
 
+### D11 · public 浏览计数必须脱离请求 ctx(2026-05-09)
+- 问题:`go func(){ ... c.Request.Context() ... }()` 在响应结束后 ctx 会被 cancel
+- 结果:GORM 的 `IncrView` 被中断,view_count 不递增
+- 修复:`context.Background()` + `WithTimeout(3s)` + 透传 trace_id
+
+### D12 · Profile schema 与 model 必须同步迁移(2026-05-09)
+- 问题:profiles 表仍是 M0 规划的复合结构,但 M3 改成扁平字段(name/email/github/...)
+- 结果:GORM 1054 unknown column
+- 修复:`000002_profile_schema_rewrite` 重写 schema,并记录 up/down
+
+### D13 · GORM 对缩写词的 snake_case 命名不符合直觉(2026-05-09)
+- `GitHub` → `git_hub`,`LinkedIn` → `linked_in`
+- 如果 migration 列名想保持 `github` / `linkedin`,必须显式 `gorm:"column:..."`
+
+### D14 · Save 不适合严格模式下的 Upsert(2026-05-09)
+- 问题:新记录 `Save()` 可能带零值时间戳(`0000-00-00`),MySQL strict 模式拒绝
+- 修复:用 `clause.OnConflict + AssignmentColumns` 明确白名单字段
+
 ## 交接下一步
 
-下个会话如果用户说"继续",进入 **M4 · 前端开发** 或 **M5 · 部署**。
+下个会话如果用户说"继续",默认进入 **M4 · 前端开发**。
 
-**M4 · 前端开发(推荐)**
-1. Vite + Vue 3 + TS + Naive UI 脚手架
-2. 把 `docs/preview/` 的 CSS 迁到 `web/src/styles/`
-3. 对接 M3 API:登录 → 文章列表 → 文章详情 → 关于我
-4. 管理后台:文章 CRUD + 分类标签管理 + 图片上传
+**第一优先级(默认)**
+1. 初始化 `web/` 前端工程(Vite + Vue 3 + TS + Naive UI)
+2. 把 `docs/preview/` 的紫色科技感 CSS 迁到 `web/src/styles/`
+3. 先打通公开页面:首页 / 技术 / 关于 / 文章详情
+4. 再做后台登录页和管理页面
 
-**M5 · 部署**
-1. Dockerfile + docker-compose(MySQL/Redis/myblog)
-2. Nginx 反向代理 + 静态文件服务
-3. 域名 + HTTPS(Let's Encrypt)
-4. 阿里云/腾讯云 VPS 部署
+**备选**
+- 如果用户说"跳到 M5",直接做 Docker / Nginx / 部署
+- 如果用户说"先补测试",继续把 e2e 脚本纳入 Makefile/CI
 
-如果用户不指定,默认走 M4(前端开发,让整个博客能跑起来)。
+**新窗口恢复时优先看的文件**
+1. `tasks.md` — 当前总进度与待办
+2. `context.md` — 决策、环境和 bug 教训
+3. `docs/api.md` — 后端接口契约
+4. `docs/preview/` — 前端视觉参考
+5. `docs/M3-e2e-verification-result.md` — 已验证结论
 
 > 本项目使用 Claude Code 协作,用户是十年 Go 后端出身女生开发者,视觉品味偏紫色科技感。
