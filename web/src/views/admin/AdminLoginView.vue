@@ -46,12 +46,13 @@ async function handleSubmit() {
     const envelope = await auth.signIn(form)
     if (envelope.code === 0) {
       discrete.message.success('登录成功')
-      router.push('/')
+      router.push('/admin')
       return
     }
     discrete.message.error(envelope.message)
-  } catch (error) {
-    discrete.message.error('登录失败,请检查后端服务是否已启动')
+  } catch (error: any) {
+    const apiMessage = error?.response?.data?.message
+    discrete.message.error(apiMessage || '登录失败,请检查后端服务是否已启动')
     console.error(error)
   }
 }
