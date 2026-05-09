@@ -28,13 +28,14 @@
 
 <script setup lang="ts">
 import { reactive } from 'vue'
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { NButton, NCard, NForm, NFormItem, NInput } from 'naive-ui'
 import { useAuthStore } from '../../stores/auth'
 import { discrete } from '../../main'
 
 const auth = useAuthStore()
 const router = useRouter()
+const route = useRoute()
 
 const form = reactive({
   username: 'admin',
@@ -46,7 +47,8 @@ async function handleSubmit() {
     const envelope = await auth.signIn(form)
     if (envelope.code === 0) {
       discrete.message.success('登录成功')
-      router.push('/admin')
+      const redirect = (route.query.redirect as string) || '/admin'
+      router.push(redirect)
       return
     }
     discrete.message.error(envelope.message)

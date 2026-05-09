@@ -1,8 +1,7 @@
 import { computed, ref } from 'vue'
 import { defineStore } from 'pinia'
 import { login, type LoginReq } from '../api/auth'
-
-const TOKEN_KEY = 'myblog-admin-token'
+import { TOKEN_KEY } from '../api/http'
 
 export const useAuthStore = defineStore('auth', () => {
   const token = ref(localStorage.getItem(TOKEN_KEY) || '')
