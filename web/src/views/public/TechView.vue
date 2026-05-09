@@ -8,7 +8,11 @@
       </div>
     </div>
 
-    <div v-if="categories.length" class="stack-board">
+    <div v-if="categoriesLoading" class="skeleton-board">
+      <div v-for="i in 4" :key="i" class="skeleton-item" />
+    </div>
+
+    <div v-else-if="categories.length" class="stack-board">
       <button
         v-for="category in categories"
         :key="category.id"
@@ -28,7 +32,9 @@
       <span class="muted-copy">当前分类下的已发布文章</span>
     </div>
 
-    <div v-if="pendingArticles" class="state-box glass-card">正在加载文章...</div>
+    <div v-if="pendingArticles" class="skeleton-grid">
+      <div v-for="i in 4" :key="i" class="skeleton-card glass-card" />
+    </div>
     <div v-else-if="items.length === 0" class="state-box glass-card">这个分类下暂时还没有已发布文章。</div>
 
     <div v-else class="feature-grid">
@@ -56,7 +62,7 @@ import { fetchPublicArticles } from '../../api/article'
 
 const currentCategoryId = ref<number | null>(null)
 
-const { state: categoriesState } = useAsyncState(() => fetchCategories(), null)
+const { state: categoriesState, isLoading: categoriesLoading } = useAsyncState(() => fetchCategories(), null)
 const categories = computed(() => categoriesState.value?.data.items ?? [])
 
 const {
