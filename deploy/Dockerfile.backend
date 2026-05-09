@@ -1,0 +1,46 @@
+# ============================================================
+# myblog backend Dockerfile
+# - 多阶段构建 backend 与 seed
+# - 运行时工作目录 /app,兼容当前 ./uploads 相对路径
+# ============================================================
+
+FROM golang:1.25-alpine AS builder
+
+WORKDIR /src
+
+RUN apk add --no-cache ca-certificates tzdata build-base
+
+COPY go.mod go.sum ./
+RUN go mod download
+
+COPY . .
+
+# 编译后端服务
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -trimpath -ldflags="-s -w" -o /out/myblog-server ./cmd/server
+
+# 编译 seed 工具
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 \
+    go build -trimpath -ldflags="-s -w" -o /out/myblog-seed ./cmd/seed
+
+FROM alpine:3.22 AS runtime
+
+WORKDIR /app
+
+RUN apk add --no-cache ca-certificates tzdata curl \
+    && addgroup -S app \
+    && adduser -S -G app app \
+    && mkdir -p /app/uploads /app/configs /app/migrations \
+    && chown -R app:app /app
+
+COPY --from=builder /out/myblog-server /usr/local/bin/myblog-server
+COPY --from=builder /out/myblog-seed /usr/local/bin/myblog-seed
+COPY configs/config.example.yaml /app/configs/config.example.yaml
+COPY migrations /app/migrations
+COPY docs /app/docs
+
+USER app
+
+EXPOSE 8080
+
+ENTRYPOINT ["/usr/local/bin/myblog-server"]
