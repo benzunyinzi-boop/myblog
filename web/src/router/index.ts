@@ -2,8 +2,14 @@ import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../stores/auth'
 
 const PublicLayout = () => import('../layouts/PublicLayout.vue')
+const AdminLayout = () => import('../layouts/AdminLayout.vue')
 const AdminLoginView = () => import('../views/admin/AdminLoginView.vue')
 const AdminDashboardView = () => import('../views/admin/AdminDashboardView.vue')
+const AdminArticlesView = () => import('../views/admin/AdminArticlesView.vue')
+const AdminArticleEditView = () => import('../views/admin/AdminArticleEditView.vue')
+const AdminCategoriesView = () => import('../views/admin/AdminCategoriesView.vue')
+const AdminTagsView = () => import('../views/admin/AdminTagsView.vue')
+const AdminProfileView = () => import('../views/admin/AdminProfileView.vue')
 const HomeView = () => import('../views/public/HomeView.vue')
 const TechView = () => import('../views/public/TechView.vue')
 const AboutView = () => import('../views/public/AboutView.vue')
@@ -33,9 +39,17 @@ export const router = createRouter({
     },
     {
       path: '/admin',
-      name: 'admin-dashboard',
-      component: AdminDashboardView,
-      meta: { requiresAuth: true }
+      component: AdminLayout,
+      meta: { requiresAuth: true },
+      children: [
+        { path: '', name: 'admin-dashboard', component: AdminDashboardView },
+        { path: 'articles', name: 'admin-articles', component: AdminArticlesView },
+        { path: 'articles/new', name: 'admin-article-new', component: AdminArticleEditView },
+        { path: 'articles/:id/edit', name: 'admin-article-edit', component: AdminArticleEditView, props: true },
+        { path: 'categories', name: 'admin-categories', component: AdminCategoriesView },
+        { path: 'tags', name: 'admin-tags', component: AdminTagsView },
+        { path: 'profile', name: 'admin-profile', component: AdminProfileView }
+      ]
     }
   ]
 })

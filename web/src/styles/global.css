@@ -614,6 +614,36 @@ a {
   text-transform: uppercase;
 }
 
+.admin-placeholder {
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.admin-placeholder h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.admin-nav-item {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.nav-label {
+  font-weight: 500;
+  letter-spacing: 0.04em;
+}
+
+.nav-meta {
+  color: var(--text-muted);
+  font-size: 12px;
+}
+
 .login-card {
   background: rgba(18, 11, 34, 0.92) !important;
   border-radius: 22px !important;
