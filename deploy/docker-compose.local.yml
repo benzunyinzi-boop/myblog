@@ -1,0 +1,16 @@
+services:
+  mysql:
+    ports:
+      - "13306:3306"
+
+  redis:
+    ports:
+      - "16379:6379"
+
+  backend:
+    ports:
+      - "18080:8080"
+
+  nginx:
+    ports:
+      - "8088:80"
