@@ -9,7 +9,7 @@ GO          := go
 GOFLAGS     := -trimpath
 LDFLAGS     := -s -w -X 'main.version=$(shell git describe --tags --always 2>/dev/null || echo dev)'
 
-.PHONY: help tidy fmt lint build run test cover clean migrate-up migrate-down seed-admin
+.PHONY: help tidy fmt lint build run test cover clean migrate-up migrate-down seed-admin compose-up compose-down compose-init compose-logs compose-restart
 
 help: ## 显示可用命令
 	@grep -E '^[a-zA-Z_-]+:.*?## .*$$' $(MAKEFILE_LIST) | \
@@ -72,3 +72,24 @@ migrate-down: ## 执行全部 down migrations(倒序)
 seed-admin: ## 创建/重置管理员(PW 指定密码,USERNAME 可覆盖,默认 admin)
 	@if [ -z "$(PW)" ]; then echo "usage: make seed-admin PW='yourPwd' [USERNAME=admin]"; exit 2; fi
 	$(GO) run ./cmd/seed -username $(or $(USERNAME),admin) -password '$(PW)'
+
+# ============================================================
+# Docker Compose 部署命令
+# ============================================================
+COMPOSE_FILES := -f deploy/docker-compose.yml -f deploy/docker-compose.local.yml
+
+compose-up: ## 启动所有服务(本地演练)
+	docker compose $(COMPOSE_FILES) up -d
+
+compose-down: ## 停止并删除所有容器
+	docker compose $(COMPOSE_FILES) down
+
+compose-init: ## 首次初始化(构建镜像+启动+查看日志)
+	docker compose $(COMPOSE_FILES) up --build
+
+compose-logs: ## 查看服务日志
+	docker compose $(COMPOSE_FILES) logs -f
+
+compose-restart: ## 重启应用层服务(backend+nginx)
+	docker compose $(COMPOSE_FILES) restart backend nginx
+
