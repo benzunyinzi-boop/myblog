@@ -1,0 +1,39 @@
+@import url('https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=Noto+Sans+SC:wght@400;500;700&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+:root {
+  --bg-base: #0b0716;
+  --bg-primary: #120b22;
+  --bg-card: #1a1130;
+  --bg-elevated: #231841;
+  --bg-code: #0e0820;
+
+  --grid-line: rgba(148, 98, 255, 0.06);
+  --grid-line-strong: rgba(148, 98, 255, 0.12);
+
+  --text-primary: #eae3ff;
+  --text-secondary: #b8add8;
+  --text-muted: #7b6ea0;
+  --text-inverse: #0b0716;
+
+  --primary: #8b5cf6;
+  --primary-2: #a78bfa;
+  --primary-3: #6d28d9;
+  --neon-cyan: #22d3ee;
+  --neon-pink: #f472b6;
+  --neon-mint: #34d399;
+
+  --line-soft: rgba(196, 181, 253, 0.08);
+  --line-regular: rgba(196, 181, 253, 0.16);
+
+  --grad-primary: linear-gradient(135deg, #8b5cf6 0%, #6366f1 50%, #22d3ee 100%);
+  --shadow-md: 0 8px 32px rgba(10, 4, 28, 0.55);
+  --shadow-lg: 0 16px 48px rgba(10, 4, 28, 0.75);
+
+  --font-display: 'Syne', sans-serif;
+  --font-sans: 'Noto Sans SC', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+  --font-mono: 'IBM Plex Mono', monospace;
+
+  --container: 1240px;
+  --radius-md: 14px;
+  --radius-lg: 24px;
+}
