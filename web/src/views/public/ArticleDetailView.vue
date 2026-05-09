@@ -10,9 +10,7 @@
           <span v-for="tag in article.tags" :key="tag.id" class="tech-pill">{{ tag.name }}</span>
         </div>
 
-        <div class="markdown-shell prose-block">
-          <pre>{{ article.content }}</pre>
-        </div>
+        <div class="prose-block markdown-body" v-html="renderedContent" />
       </article>
 
       <aside class="glass-card article-aside">
@@ -20,7 +18,7 @@
         <dl>
           <div>
             <dt>Published</dt>
-            <dd>{{ article.published_at || '-' }}</dd>
+            <dd>{{ formatTimestamp(article.published_at) }}</dd>
           </div>
           <div>
             <dt>Category ID</dt>
@@ -47,9 +45,22 @@ import { computed } from 'vue'
 import { useRoute } from 'vue-router'
 import { useAsyncState } from '@vueuse/core'
 import { fetchPublicArticleBySlug } from '../../api/article'
+import { renderMarkdown } from '../../utils/markdown'
 
 const route = useRoute()
 const slug = computed(() => String(route.params.slug || ''))
 const { state } = useAsyncState(() => fetchPublicArticleBySlug(slug.value), null)
 const article = computed(() => state.value?.data ?? null)
+
+const renderedContent = computed(() => {
+  if (!article.value?.content) {
+    return '<p>文章内容为空。</p>'
+  }
+  return renderMarkdown(article.value.content)
+})
+
+function formatTimestamp(ts?: number): string {
+  if (!ts) return '-'
+  return new Date(ts * 1000).toLocaleDateString('zh-CN')
+}
 </script>
