@@ -671,6 +671,22 @@ a {
   gap: 12px;
 }
 
+.admin-form-card {
+  padding: 28px 30px;
+}
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px;
+}
+
+@media (max-width: 720px) {
+  .form-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
 .admin-nav-item {
   display: flex;
   align-items: baseline;
