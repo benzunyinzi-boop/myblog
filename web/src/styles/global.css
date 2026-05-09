@@ -628,6 +628,49 @@ a {
   margin: 0;
 }
 
+.admin-page {
+  display: flex;
+  flex-direction: column;
+  gap: 22px;
+}
+
+.admin-page-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
+}
+
+.admin-page-head h2 {
+  font-family: var(--font-display);
+  font-size: 30px;
+  color: var(--text-primary);
+  margin: 8px 0 6px;
+}
+
+.admin-page-head .page-copy {
+  max-width: 640px;
+  margin: 0;
+}
+
+.admin-table-card {
+  padding: 8px;
+}
+
+.admin-table-card :deep(.n-data-table) {
+  background: transparent;
+}
+
+.admin-modal {
+  border-radius: 18px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+}
+
 .admin-nav-item {
   display: flex;
   align-items: baseline;
