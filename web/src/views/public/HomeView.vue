@@ -5,15 +5,30 @@
       <div>
         <div class="eyebrow"><span class="status-dot" />online · backend · decade log</div>
         <h1 class="hero-title">
-          记录系统的边界,<br />
-          也记录<span class="gradient-text">自己</span>的成长。
+          把分布式系统的锋利,<br />
+          写成<span class="gradient-text">可读的经验</span>。
         </h1>
         <p class="hero-subtitle">
-          这是一个带着霓虹感的工程日志。十年后端经验,分布式系统、数据库、缓存与部署实践,都会在这里慢慢沉淀。
+          这是一个偏工程化、也偏审美化的个人站点。十年后端开发经验,会在这里被整理成文章、分类和长期可复用的思考。
         </p>
         <div class="hero-actions">
-          <RouterLink class="primary-button" to="/tech">探索技术栈</RouterLink>
+          <RouterLink class="primary-button" to="/tech">浏览技术栏目</RouterLink>
           <RouterLink class="ghost-button" to="/about">关于我</RouterLink>
+        </div>
+
+        <div class="hero-metrics">
+          <div class="metric-card glass-card">
+            <span>published</span>
+            <strong>{{ items.length }}</strong>
+          </div>
+          <div class="metric-card glass-card">
+            <span>categories</span>
+            <strong>{{ categories.length }}</strong>
+          </div>
+          <div class="metric-card glass-card">
+            <span>status</span>
+            <strong>stable</strong>
+          </div>
         </div>
       </div>
 
@@ -29,19 +44,47 @@
   <section class="section-gap container">
     <div class="section-headline">
       <div>
+        <span class="section-chip">focus / taxonomy</span>
+        <h2>技术主轴</h2>
+      </div>
+      <RouterLink class="article-link" to="/tech">查看全部分类 →</RouterLink>
+    </div>
+
+    <div class="stack-board compact">
+      <button
+        v-for="category in categories.slice(0, 4)"
+        :key="category.id"
+        class="stack-item active"
+      >
+        <span class="stack-slug">{{ category.slug }}</span>
+        <strong>{{ category.name }}</strong>
+        <small>{{ category.description || '工程实践笔记' }}</small>
+      </button>
+    </div>
+  </section>
+
+  <section class="section-gap container">
+    <div class="section-headline">
+      <div>
         <span class="section-chip">latest / articles</span>
         <h2>最近更新</h2>
       </div>
     </div>
 
-    <div class="feature-grid">
+    <div v-if="pending" class="state-box glass-card">正在加载最近文章...</div>
+    <div v-else-if="items.length === 0" class="state-box glass-card">还没有已发布文章,可以先去后台创建一篇。</div>
+
+    <div v-else class="feature-grid">
       <article v-for="article in items" :key="article.slug" class="glass-card article-card">
         <div class="article-tags">
           <span v-for="tag in article.tags.slice(0, 2)" :key="tag.id" class="tech-pill">{{ tag.name }}</span>
         </div>
         <h3>{{ article.title }}</h3>
-        <p>{{ article.summary }}</p>
-        <RouterLink class="article-link" :to="`/blog/${article.slug}`">阅读全文 →</RouterLink>
+        <p>{{ article.summary || '这是一篇还没有摘要的文章。' }}</p>
+        <div class="card-footline">
+          <span>{{ article.view_count }} views</span>
+          <RouterLink class="article-link" :to="`/blog/${article.slug}`">阅读全文 →</RouterLink>
+        </div>
       </article>
     </div>
   </section>
@@ -52,8 +95,11 @@ import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import { useAsyncState } from '@vueuse/core'
 import { fetchPublicArticles } from '../../api/article'
+import { fetchCategories } from '../../api/meta'
 
-const { state } = useAsyncState(() => fetchPublicArticles({ page: 1, page_size: 6 }), null)
+const { state: articleState, isLoading: pending } = useAsyncState(() => fetchPublicArticles({ page: 1, page_size: 6 }), null)
+const { state: categoryState } = useAsyncState(() => fetchCategories(), null)
 
-const items = computed(() => state.value?.data.items ?? [])
+const items = computed(() => articleState.value?.data.items ?? [])
+const categories = computed(() => categoryState.value?.data.items ?? [])
 </script>

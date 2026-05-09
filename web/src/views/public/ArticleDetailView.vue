@@ -4,13 +4,13 @@
       <article class="glass-card article-shell">
         <div class="article-topline">{{ article.slug }} · {{ article.view_count }} views</div>
         <h1 class="page-title article-heading">{{ article.title }}</h1>
-        <p class="page-copy article-summary">{{ article.summary }}</p>
+        <p class="page-copy article-summary">{{ article.summary || '这篇文章还没有摘要。' }}</p>
 
         <div class="article-tag-row">
           <span v-for="tag in article.tags" :key="tag.id" class="tech-pill">{{ tag.name }}</span>
         </div>
 
-        <div class="markdown-shell">
+        <div class="markdown-shell prose-block">
           <pre>{{ article.content }}</pre>
         </div>
       </article>
@@ -30,9 +30,15 @@
             <dt>Status</dt>
             <dd>{{ article.status }}</dd>
           </div>
+          <div>
+            <dt>Tags</dt>
+            <dd>{{ article.tags.map((tag) => tag.slug).join(' · ') || '-' }}</dd>
+          </div>
         </dl>
       </aside>
     </div>
+
+    <div v-else class="state-box glass-card">正在加载文章内容...</div>
   </section>
 </template>
 

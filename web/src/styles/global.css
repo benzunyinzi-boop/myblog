@@ -61,6 +61,10 @@ a {
   padding: 88px 0;
 }
 
+.inner-gap {
+  padding-top: 24px;
+}
+
 .page-title,
 .hero-title,
 .section-headline h2,
@@ -81,6 +85,11 @@ a {
 .hero-subtitle {
   color: var(--text-secondary);
   line-height: 1.85;
+}
+
+.muted-copy {
+  color: var(--text-muted);
+  font-size: 14px;
 }
 
 .gradient-text {
@@ -112,6 +121,10 @@ a {
   letter-spacing: 0.08em;
 }
 
+.section-chip.subtle {
+  color: var(--text-secondary);
+}
+
 .glass-card {
   position: relative;
   overflow: hidden;
@@ -127,6 +140,11 @@ a {
   inset: 0;
   background: linear-gradient(130deg, rgba(255,255,255,0.08), transparent 22%, transparent 78%, rgba(34,211,238,0.1));
   pointer-events: none;
+}
+
+.state-box {
+  padding: 28px;
+  color: var(--text-secondary);
 }
 
 .site-header {
@@ -251,6 +269,33 @@ a {
   margin-top: 28px;
 }
 
+.hero-metrics {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 14px;
+  margin-top: 28px;
+}
+
+.metric-card {
+  padding: 16px 18px;
+}
+
+.metric-card span {
+  display: block;
+  color: var(--text-muted);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.metric-card strong {
+  display: block;
+  margin-top: 8px;
+  font-family: var(--font-display);
+  font-size: 28px;
+}
+
 .primary-button,
 .ghost-button {
   display: inline-flex;
@@ -314,6 +359,13 @@ a {
   margin-bottom: 32px;
 }
 
+.section-subline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
 .feature-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -330,8 +382,18 @@ a {
 }
 
 .article-card p,
-.stack-item small {
+.stack-item small,
+.narrative-card p {
   color: var(--text-secondary);
+}
+
+.card-footline {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 18px;
+  color: var(--text-muted);
+  font-size: 13px;
 }
 
 .article-tags,
@@ -360,6 +422,10 @@ a {
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
   gap: 16px;
   margin-bottom: 28px;
+}
+
+.stack-board.compact {
+  margin-bottom: 0;
 }
 
 .stack-item {
@@ -396,7 +462,8 @@ a {
 .contact-card,
 .article-shell,
 .article-aside,
-.login-brand {
+.login-brand,
+.narrative-card {
   padding: 28px;
 }
 
@@ -450,6 +517,14 @@ a {
   color: var(--text-secondary);
 }
 
+.prose-block {
+  margin-top: 22px;
+  padding: 22px;
+  border-radius: 18px;
+  border: 1px solid var(--line-soft);
+  background: rgba(14, 8, 32, 0.9);
+}
+
 .article-aside dl {
   margin: 18px 0 0;
   display: grid;
@@ -479,7 +554,8 @@ a {
   .about-grid,
   .admin-grid,
   .article-layout,
-  .feature-grid {
+  .feature-grid,
+  .hero-metrics {
     grid-template-columns: 1fr;
   }
 

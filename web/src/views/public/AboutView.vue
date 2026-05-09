@@ -23,6 +23,20 @@
         </ul>
       </div>
     </div>
+
+    <div class="section-gap inner-gap">
+      <div class="section-headline">
+        <div>
+          <span class="section-chip">career / note</span>
+          <h2>我想把这里做成什么</h2>
+        </div>
+      </div>
+      <div class="glass-card narrative-card">
+        <p>
+          这里不会只是一个简历页,也不会只是文章堆栈。它更像一份长期维护的技术侧写:哪些经验值得留下,哪些事故值得反复复盘,哪些设计在多年之后仍然成立。
+        </p>
+      </div>
+    </div>
   </section>
 </template>
 
