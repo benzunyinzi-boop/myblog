@@ -4,7 +4,6 @@
       <div class="container nav-inner">
         <RouterLink class="brand" to="/">
           <span class="brand-logo" />
-          <span class="brand-text">yinyin.dev</span>
         </RouterLink>
 
         <nav class="nav-links">
