@@ -2,15 +2,22 @@
 # myblog backend Dockerfile
 # - 多阶段构建 backend 与 seed
 # - 运行时工作目录 /app,兼容当前 ./uploads 相对路径
+# - apk 使用阿里云镜像源,避免国内网络拉不到 dl-cdn.alpinelinux.org
 # ============================================================
 
 FROM golang:1.25-alpine AS builder
 
 WORKDIR /src
 
-RUN apk add --no-cache ca-certificates tzdata build-base
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk add --no-cache ca-certificates tzdata build-base
 
 COPY go.mod go.sum ./
+
+# Go module 国内代理,避免拉模块超时
+ENV GOPROXY=https://goproxy.cn,direct
+ENV GOSUMDB=off
+
 RUN go mod download
 
 COPY . .
@@ -27,7 +34,8 @@ FROM alpine:3.22 AS runtime
 
 WORKDIR /app
 
-RUN apk add --no-cache ca-certificates tzdata curl \
+RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories \
+    && apk add --no-cache ca-certificates tzdata curl \
     && addgroup -S app \
     && adduser -S -G app app \
     && mkdir -p /app/uploads /app/configs /app/migrations \
