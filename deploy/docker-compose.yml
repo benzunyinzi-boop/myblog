@@ -148,6 +148,7 @@ services:
       - uploads_data:/app/uploads
     expose:
       - "8080"
+    command: ["-config", "/app/configs/config.example.yaml"]
     restart: unless-stopped
 
   nginx:
