@@ -170,23 +170,28 @@ a {
 }
 
 .brand-logo {
-  width: 24px;
-  height: 24px;
+  width: 40px;
+  height: 40px;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.3s ease;
 }
 
-.brand-logo::before,
-.brand-logo::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  border: 1px solid var(--primary);
-  transform: rotate(45deg);
+.brand-logo svg {
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(0 0 8px rgba(139, 92, 246, 0.4));
+  transition: filter 0.3s ease;
 }
 
-.brand-logo::after {
-  inset: 6px;
-  background: var(--primary);
+.brand:hover .brand-logo {
+  transform: rotate(180deg) scale(1.1);
+}
+
+.brand:hover .brand-logo svg {
+  filter: drop-shadow(0 0 16px rgba(139, 92, 246, 0.8));
 }
 
 .brand-text {
@@ -334,7 +339,7 @@ a {
 }
 
 .orbit {
-  border: 1px dashed rgba(196, 181, 253, 0.28);
+  border: 1px dashed rgba(196, 181, 253, 0.18);
 }
 
 .orbit-lg {
@@ -356,25 +361,66 @@ a {
   height: 42%;
   margin-top: -21%;
   margin-left: -21%;
-  border-color: rgba(34, 211, 238, 0.3);
+  border-color: rgba(34, 211, 238, 0.2);
   animation: orbit-spin 18s linear infinite;
 }
 
-.orbit-dot {
+/* 行星样式 */
+.planet {
   position: absolute;
-  width: 8px;
-  height: 8px;
-  background: rgba(196, 181, 253, 0.8);
+  width: var(--size);
+  height: var(--size);
   border-radius: 50%;
-  box-shadow: 0 0 12px rgba(196, 181, 253, 0.6);
   top: 50%;
   left: 50%;
-  transform: rotate(var(--angle)) translateX(calc(50% - 4px)) translateY(-4px);
+  transform: rotate(var(--angle)) translateX(calc(50% - var(--size) / 2)) translateY(calc(var(--size) / -2));
+  animation: planet-spin 6s ease-in-out infinite;
 }
 
-.orbit-dot.cyan {
-  background: rgba(34, 211, 238, 0.8);
-  box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+/* 不同颜色的行星 */
+.planet-purple {
+  background: radial-gradient(circle at 30% 30%, #c4b5fd, #8b5cf6);
+  box-shadow: 0 0 20px rgba(139, 92, 246, 0.6), inset -4px -4px 8px rgba(0, 0, 0, 0.3);
+}
+
+.planet-blue {
+  background: radial-gradient(circle at 30% 30%, #93c5fd, #3b82f6);
+  box-shadow: 0 0 18px rgba(59, 130, 246, 0.6), inset -3px -3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.planet-cyan {
+  background: radial-gradient(circle at 30% 30%, #67e8f9, #22d3ee);
+  box-shadow: 0 0 16px rgba(34, 211, 238, 0.7), inset -3px -3px 6px rgba(0, 0, 0, 0.3);
+}
+
+.planet-pink {
+  background: radial-gradient(circle at 30% 30%, #f9a8d4, #ec4899);
+  box-shadow: 0 0 14px rgba(236, 72, 153, 0.6), inset -2px -2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.planet-green {
+  background: radial-gradient(circle at 30% 30%, #86efac, #22c55e);
+  box-shadow: 0 0 12px rgba(34, 197, 94, 0.6), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.planet-orange {
+  background: radial-gradient(circle at 30% 30%, #fdba74, #f97316);
+  box-shadow: 0 0 10px rgba(249, 115, 22, 0.6), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.planet-teal {
+  background: radial-gradient(circle at 30% 30%, #5eead4, #14b8a6);
+  box-shadow: 0 0 10px rgba(20, 184, 166, 0.6), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.planet-violet {
+  background: radial-gradient(circle at 30% 30%, #c084fc, #a855f7);
+  box-shadow: 0 0 10px rgba(168, 85, 247, 0.6), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.planet-amber {
+  background: radial-gradient(circle at 30% 30%, #fcd34d, #f59e0b);
+  box-shadow: 0 0 8px rgba(245, 158, 11, 0.6), inset -1px -1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .core {
@@ -382,8 +428,11 @@ a {
   height: 18%;
   margin-top: -9%;
   margin-left: -9%;
-  background: radial-gradient(circle, #c4b5fd 0%, #8b5cf6 55%, #4c1d95 100%);
-  box-shadow: 0 0 36px rgba(139, 92, 246, 0.5);
+  background: radial-gradient(circle at 35% 35%, #fef3c7, #fbbf24, #f59e0b, #dc2626);
+  box-shadow:
+    0 0 40px rgba(251, 191, 36, 0.8),
+    0 0 80px rgba(249, 115, 22, 0.4),
+    inset -6px -6px 12px rgba(220, 38, 38, 0.4);
   animation: core-pulse 4s ease-in-out infinite;
 }
 
@@ -392,9 +441,14 @@ a {
   to { transform: rotate(360deg); }
 }
 
+@keyframes planet-spin {
+  0%, 100% { transform: rotate(var(--angle)) translateX(calc(50% - var(--size) / 2)) translateY(calc(var(--size) / -2)) scale(1); }
+  50% { transform: rotate(var(--angle)) translateX(calc(50% - var(--size) / 2)) translateY(calc(var(--size) / -2)) scale(1.1); }
+}
+
 @keyframes core-pulse {
-  0%, 100% { transform: scale(1); opacity: 0.9; }
-  50% { transform: scale(1.08); opacity: 1; }
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.12); }
 }
 
 .section-headline {

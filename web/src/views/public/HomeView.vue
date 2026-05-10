@@ -33,21 +33,25 @@
       </div>
 
       <div class="hero-orbit">
+        <!-- 外轨道 - 2颗行星 -->
         <div class="orbit orbit-lg">
-          <span class="orbit-dot" style="--angle: 0deg;" />
-          <span class="orbit-dot" style="--angle: 120deg;" />
-          <span class="orbit-dot" style="--angle: 240deg;" />
+          <div class="planet planet-purple" style="--angle: 45deg; --size: 24px;" />
+          <div class="planet planet-blue" style="--angle: 225deg; --size: 20px;" />
         </div>
+        <!-- 中轨道 - 3颗行星 -->
         <div class="orbit orbit-md">
-          <span class="orbit-dot" style="--angle: 60deg;" />
-          <span class="orbit-dot" style="--angle: 180deg;" />
-          <span class="orbit-dot" style="--angle: 300deg;" />
+          <div class="planet planet-cyan" style="--angle: 0deg; --size: 18px;" />
+          <div class="planet planet-pink" style="--angle: 120deg; --size: 16px;" />
+          <div class="planet planet-green" style="--angle: 240deg; --size: 14px;" />
         </div>
+        <!-- 内轨道 - 4颗小行星 -->
         <div class="orbit orbit-sm">
-          <span class="orbit-dot cyan" style="--angle: 30deg;" />
-          <span class="orbit-dot cyan" style="--angle: 150deg;" />
-          <span class="orbit-dot cyan" style="--angle: 270deg;" />
+          <div class="planet planet-orange" style="--angle: 30deg; --size: 12px;" />
+          <div class="planet planet-teal" style="--angle: 120deg; --size: 10px;" />
+          <div class="planet planet-violet" style="--angle: 210deg; --size: 11px;" />
+          <div class="planet planet-amber" style="--angle: 300deg; --size: 9px;" />
         </div>
+        <!-- 中心恒星 -->
         <div class="core" />
       </div>
     </div>
