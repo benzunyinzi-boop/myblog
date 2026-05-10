@@ -33,9 +33,21 @@
       </div>
 
       <div class="hero-orbit">
-        <div class="orbit orbit-lg" />
-        <div class="orbit orbit-md" />
-        <div class="orbit orbit-sm" />
+        <div class="orbit orbit-lg">
+          <span class="orbit-dot" style="--angle: 0deg;" />
+          <span class="orbit-dot" style="--angle: 120deg;" />
+          <span class="orbit-dot" style="--angle: 240deg;" />
+        </div>
+        <div class="orbit orbit-md">
+          <span class="orbit-dot" style="--angle: 60deg;" />
+          <span class="orbit-dot" style="--angle: 180deg;" />
+          <span class="orbit-dot" style="--angle: 300deg;" />
+        </div>
+        <div class="orbit orbit-sm">
+          <span class="orbit-dot cyan" style="--angle: 30deg;" />
+          <span class="orbit-dot cyan" style="--angle: 150deg;" />
+          <span class="orbit-dot cyan" style="--angle: 270deg;" />
+        </div>
         <div class="core" />
       </div>
     </div>

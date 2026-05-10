@@ -360,6 +360,23 @@ a {
   animation: orbit-spin 18s linear infinite;
 }
 
+.orbit-dot {
+  position: absolute;
+  width: 8px;
+  height: 8px;
+  background: rgba(196, 181, 253, 0.8);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(196, 181, 253, 0.6);
+  top: 50%;
+  left: 50%;
+  transform: rotate(var(--angle)) translateX(calc(50% - 4px)) translateY(-4px);
+}
+
+.orbit-dot.cyan {
+  background: rgba(34, 211, 238, 0.8);
+  box-shadow: 0 0 12px rgba(34, 211, 238, 0.6);
+}
+
 .core {
   width: 18%;
   height: 18%;
@@ -401,7 +418,47 @@ a {
 }
 
 .article-card {
+  position: relative;
   padding: 24px;
+  overflow: hidden;
+  transition: transform 0.3s ease;
+}
+
+.article-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.6) 25%,
+    rgba(139, 92, 246, 0.6) 50%,
+    rgba(34, 211, 238, 0.6) 75%,
+    transparent 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+}
+
+.article-card:hover::before {
+  opacity: 1;
+  animation: border-spin 3s linear infinite;
+}
+
+.article-card:hover {
+  transform: translateY(-2px);
+}
+
+@keyframes border-spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .article-card h3 {
