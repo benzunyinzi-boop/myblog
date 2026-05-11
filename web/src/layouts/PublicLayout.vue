@@ -26,11 +26,17 @@
           </div>
         </RouterLink>
 
-        <nav class="nav-links">
-          <RouterLink to="/" :class="linkClass('/')">首页</RouterLink>
-          <RouterLink to="/tech" :class="linkClass('/tech')">技术</RouterLink>
-          <RouterLink to="/about" :class="linkClass('/about')">关于</RouterLink>
-          <a class="ghost-link" href="#photography">摄影</a>
+        <nav ref="navEl" class="nav-links" @mouseleave="clearHover">
+          <RouterLink
+            v-for="link in navLinks"
+            :key="link.path"
+            :to="link.path"
+            :class="linkClass(link.path)"
+            :data-path="link.path"
+            @mouseenter="onEnter($event, link.path)"
+          >{{ link.label }}</RouterLink>
+
+          <NavHoverPreview :path="hoveredPath" :anchor-x="anchorX" />
         </nav>
 
         <RouterLink class="admin-entry" to="/admin/login">Admin</RouterLink>
@@ -44,11 +50,48 @@
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
 import { RouterLink, RouterView, useRoute } from 'vue-router'
+import NavHoverPreview from '../components/NavHoverPreview.vue'
 
 const route = useRoute()
+
+const navLinks = [
+  { path: '/', label: '首页' },
+  { path: '/tech', label: '技术' },
+  { path: '/about', label: '关于' },
+  { path: '/photo', label: '摄影' }
+]
+
+const navEl = ref<HTMLElement | null>(null)
+const hoveredPath = ref<string | null>(null)
+const anchorX = ref(0)
 
 function linkClass(path: string) {
   return route.path === path ? 'nav-link active' : 'nav-link'
 }
+
+function onEnter(e: MouseEvent, path: string) {
+  if (path === '/') {
+    hoveredPath.value = null
+    return
+  }
+  const target = e.currentTarget as HTMLElement
+  const nav = navEl.value
+  if (!target || !nav) return
+  const tRect = target.getBoundingClientRect()
+  const nRect = nav.getBoundingClientRect()
+  anchorX.value = tRect.left - nRect.left + tRect.width / 2
+  hoveredPath.value = path
+}
+
+function clearHover() {
+  hoveredPath.value = null
+}
 </script>
+
+<style scoped>
+.nav-links {
+  position: relative;
+}
+</style>
