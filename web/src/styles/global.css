@@ -1027,3 +1027,137 @@ a {
     width: min(var(--container), calc(100% - 32px));
   }
 }
+
+/* ============================================================
+ * PhotoView · 瀑布流 + 滤镜 + 胶片孔
+ * ============================================================ */
+.photo-page {
+  position: relative;
+}
+
+.photo-filters {
+  display: inline-flex;
+  gap: 8px;
+  padding: 6px;
+  margin-bottom: 28px;
+  border-radius: 999px;
+  background: rgba(26, 17, 48, 0.46);
+  border: 1px solid var(--line-soft);
+}
+
+.photo-filter {
+  padding: 9px 18px;
+  border-radius: 999px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: 200ms ease;
+}
+
+.photo-filter:hover {
+  color: var(--text-primary);
+}
+
+.photo-filter.active {
+  background: var(--grad-primary);
+  color: var(--text-inverse);
+}
+
+.photo-masonry {
+  column-count: 3;
+  column-gap: 18px;
+}
+
+.photo-item {
+  position: relative;
+  break-inside: avoid;
+  margin: 0 0 18px;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid var(--line-soft);
+  background: rgba(26, 17, 48, 0.5);
+  transition: transform 320ms ease, border-color 320ms ease, box-shadow 320ms ease;
+}
+
+.photo-item:hover {
+  transform: translateY(-3px);
+  border-color: rgba(196, 181, 253, 0.35);
+  box-shadow: 0 16px 42px -20px rgba(139, 92, 246, 0.55);
+}
+
+.photo-item img {
+  width: 100%;
+  display: block;
+  transition: transform 0.55s ease;
+}
+
+.photo-item:hover img {
+  transform: scale(1.04);
+}
+
+.photo-meta {
+  position: absolute;
+  inset: auto 0 0 0;
+  padding: 18px 18px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  background: linear-gradient(to top, rgba(11, 7, 22, 0.92), rgba(11, 7, 22, 0));
+  color: var(--text-primary);
+  opacity: 0;
+  transform: translateY(22%);
+  transition: opacity 280ms ease, transform 280ms ease;
+  font-family: var(--font-mono);
+  font-size: 12px;
+}
+
+.photo-meta strong {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 16px;
+  letter-spacing: -0.01em;
+  color: var(--text-primary);
+}
+
+.photo-meta span {
+  color: var(--text-secondary);
+  letter-spacing: 0.04em;
+}
+
+.photo-item:hover .photo-meta {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+.film-hole {
+  position: absolute;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: rgba(196, 181, 253, 0.32);
+  box-shadow: 0 0 8px rgba(139, 92, 246, 0.6);
+  opacity: 0;
+  transition: opacity 280ms ease;
+  pointer-events: none;
+}
+
+.photo-item:hover .film-hole {
+  opacity: 1;
+}
+
+.film-hole-tl { top: 10px;    left: 10px; }
+.film-hole-tr { top: 10px;    right: 10px; }
+.film-hole-bl { bottom: 10px; left: 10px; }
+.film-hole-br { bottom: 10px; right: 10px; }
+
+@media (max-width: 960px) {
+  .photo-masonry { column-count: 2; }
+}
+
+@media (max-width: 600px) {
+  .photo-masonry { column-count: 1; }
+}
