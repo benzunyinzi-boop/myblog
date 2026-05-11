@@ -1,11 +1,5 @@
 <template>
   <RouterLink :to="`/blog/${article.slug}`" class="organic-card">
-    <svg class="organic-border" viewBox="0 0 400 280" preserveAspectRatio="none" overflow="visible" aria-hidden="true">
-      <path :d="path" class="organic-fill" />
-      <path :d="path" class="organic-stroke" />
-      <path :d="path" class="organic-flow" />
-    </svg>
-
     <div class="organic-content">
       <div class="organic-tags">
         <span v-for="t in article.tags?.slice(0, 2) ?? []" :key="t.id" class="tech-pill">{{ t.name }}</span>
@@ -21,105 +15,65 @@
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
 import { RouterLink } from 'vue-router'
 import type { ArticleSummary } from '../api/article'
 
-const props = defineProps<{ article: ArticleSummary }>()
-
-const W = 400
-const H = 280
-
-function seedRandom(id: number, i: number) {
-  const x = Math.sin(id * 9301 + i * 49297) * 10000
-  return x - Math.floor(x)
-}
-
-function buildPath(id: number): string {
-  const off = (i: number) => 6 + seedRandom(id, i) * 10
-  const pts: Array<[number, number]> = [
-    [off(1), 0],
-    [W * 0.28, -off(2)],
-    [W * 0.55, off(3) * 0.6],
-    [W * 0.78, -off(4) * 0.8],
-    [W - off(5), 0],
-    [W + off(6) * 0.6, H * 0.32],
-    [W - off(7) * 0.8, H * 0.58],
-    [W + off(8) * 0.5, H * 0.82],
-    [W - off(9), H],
-    [W * 0.62, H + off(10) * 0.6],
-    [W * 0.32, H - off(11) * 0.6],
-    [off(12), H],
-    [-off(13) * 0.6, H * 0.72],
-    [off(14) * 0.8, H * 0.48],
-    [-off(15) * 0.6, H * 0.22]
-  ]
-  const head = `M ${pts[0][0].toFixed(2)},${pts[0][1].toFixed(2)}`
-  const tail = pts.slice(1).map((p) => `T ${p[0].toFixed(2)},${p[1].toFixed(2)}`).join(' ')
-  return `${head} ${tail} Z`
-}
-
-const path = computed(() => buildPath(props.article.id))
+defineProps<{ article: ArticleSummary }>()
 </script>
 
 <style scoped>
 .organic-card {
   position: relative;
   display: block;
-  padding: 28px 26px 22px;
+  padding: 26px 24px 22px;
+  border-radius: 16px;
   color: inherit;
   text-decoration: none;
-  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1);
+  background: linear-gradient(160deg, rgba(22, 14, 42, 0.75), rgba(14, 8, 30, 0.92));
+  border: 1px solid rgba(196, 181, 253, 0.14);
+  transition: transform 320ms cubic-bezier(0.2, 0.8, 0.2, 1), border-color 280ms ease, box-shadow 280ms ease;
+  overflow: hidden;
+}
+
+.organic-card::before {
+  content: '';
+  position: absolute;
+  inset: -2px;
+  border-radius: 18px;
+  padding: 2px;
+  background: conic-gradient(
+    from 0deg,
+    transparent 0%,
+    rgba(34, 211, 238, 0.7) 25%,
+    rgba(139, 92, 246, 0.7) 50%,
+    rgba(34, 211, 238, 0.7) 75%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+          mask-composite: exclude;
+  opacity: 0;
+  transition: opacity 320ms ease;
+  pointer-events: none;
+}
+
+.organic-card:hover::before {
+  opacity: 1;
+  animation: border-rotate 2.4s linear infinite;
 }
 
 .organic-card:hover {
   transform: translateY(-4px);
+  border-color: rgba(139, 92, 246, 0.35);
+  box-shadow: 0 12px 36px -12px rgba(139, 92, 246, 0.4);
 }
 
-.organic-border {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-  pointer-events: none;
-  overflow: visible;
-}
-
-.organic-fill {
-  fill: rgba(22, 14, 42, 0.72);
-  stroke: none;
-}
-
-.organic-stroke {
-  fill: none;
-  stroke: rgba(196, 181, 253, 0.3);
-  stroke-width: 1.1;
-  transition: stroke 280ms ease, stroke-width 280ms ease;
-}
-
-.organic-flow {
-  fill: none;
-  stroke: var(--neon-cyan);
-  stroke-width: 1.6;
-  stroke-dasharray: 14 22;
-  stroke-dashoffset: 0;
-  opacity: 0;
-  filter: drop-shadow(0 0 6px rgba(34, 211, 238, 0.55));
-  transition: opacity 280ms ease;
-}
-
-.organic-card:hover .organic-stroke {
-  stroke: rgba(167, 139, 250, 0.65);
-  stroke-width: 1.3;
-}
-
-.organic-card:hover .organic-flow {
-  opacity: 1;
-  animation: organic-dash 2.6s linear infinite;
-}
-
-@keyframes organic-dash {
-  to { stroke-dashoffset: -144; }
+@keyframes border-rotate {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 .organic-content {
@@ -127,7 +81,7 @@ const path = computed(() => buildPath(props.article.id))
   display: flex;
   flex-direction: column;
   gap: 10px;
-  min-height: 220px;
+  min-height: 200px;
 }
 
 .organic-tags {

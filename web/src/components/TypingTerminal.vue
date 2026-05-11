@@ -23,13 +23,13 @@
         <div class="term-line muted">[ OK ] Mounting filesystems...</div>
         <div class="term-line muted">[ OK ] Starting network service...</div>
         <div class="term-line muted">[ OK ] Reached target graphical interface.</div>
-        <div class="term-line ok">welcome back, yinyin ✨</div>
+        <div class="term-line ok">welcome back, benzunyinzi ✨</div>
       </template>
 
       <template v-else>
         <!-- 输入行:提示符 + 打字 + 闪烁光标 -->
         <div class="term-line">
-          <span class="prompt">yinyin@blog</span>
+          <span class="prompt">benzunyinzi@blog</span>
           <span class="prompt-sep">:</span>
           <span class="path">~</span>
           <span class="prompt-sep">$</span>
@@ -58,7 +58,7 @@
             └─ myblog-server --release --trace=on
           </div>
           <div v-if="state === 'idle'" class="term-line">
-            <span class="prompt">yinyin@blog</span>
+            <span class="prompt">benzunyinzi@blog</span>
             <span class="prompt-sep">:</span>
             <span class="path">~</span>
             <span class="prompt-sep">$</span>
