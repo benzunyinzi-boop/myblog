@@ -33,26 +33,34 @@
       </div>
 
       <div class="hero-orbit">
-        <!-- 外轨道 - 2颗行星 -->
-        <div class="orbit orbit-lg">
+        <!-- 静态虚线轨道 -->
+        <div class="orbit-ring orbit-ring-lg" />
+        <div class="orbit-ring orbit-ring-md" />
+        <div class="orbit-ring orbit-ring-sm" />
+
+        <!-- 中心恒星 -->
+        <div class="core" />
+
+        <!-- 外轨道行星组(顺时针 42s) -->
+        <div class="planet-track planet-track-lg">
           <div class="planet planet-lg planet-purple" style="--angle: 45deg;" />
           <div class="planet planet-lg planet-blue" style="--angle: 225deg;" />
         </div>
-        <!-- 中轨道 - 3颗行星 -->
-        <div class="orbit orbit-md">
+
+        <!-- 中轨道行星组(逆时针 28s) -->
+        <div class="planet-track planet-track-md">
           <div class="planet planet-md planet-cyan" style="--angle: 0deg;" />
           <div class="planet planet-md planet-pink" style="--angle: 120deg;" />
           <div class="planet planet-md planet-green" style="--angle: 240deg;" />
         </div>
-        <!-- 内轨道 - 4颗小行星 -->
-        <div class="orbit orbit-sm">
+
+        <!-- 内轨道行星组(顺时针 18s) -->
+        <div class="planet-track planet-track-sm">
           <div class="planet planet-sm planet-orange" style="--angle: 30deg;" />
           <div class="planet planet-sm planet-teal" style="--angle: 120deg;" />
           <div class="planet planet-sm planet-violet" style="--angle: 210deg;" />
           <div class="planet planet-sm planet-amber" style="--angle: 300deg;" />
         </div>
-        <!-- 中心恒星 -->
-        <div class="core" />
       </div>
     </div>
   </section>
