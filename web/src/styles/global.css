@@ -345,7 +345,7 @@ a {
 .orbit-ring-md { width: 346px; height: 346px; }
 .orbit-ring-sm { width: 202px; height: 202px; border-color: rgba(34, 211, 238, 0.28); }
 
-/* 行星轨道组:这是一个定点 div,负责整体旋转 */
+/* 行星轨道组(无尺寸定点,旋转它) */
 .planet-track {
   position: absolute;
   top: 50%;
@@ -357,101 +357,179 @@ a {
 .planet-track-md { animation: orbit-spin 28s linear infinite reverse; }
 .planet-track-sm { animation: orbit-spin 18s linear infinite; }
 
-/* 行星:从 track 中心 rotate 到 angle,再 translateY(-radius) 推到轨道边缘 */
+/* 行星:用 emoji 做贴图,大小统一,阴影做光晕 */
 .planet {
   position: absolute;
   top: 0;
   left: 0;
-  border-radius: 50%;
-  /* rotate + translateY + 反向 rotate,让行星到达轨道边缘同时保持不倾斜 */
-  transform-origin: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+  user-select: none;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.4));
 }
 
-/* 行星尺寸 + 使用对应轨道半径 */
 .planet-lg {
-  width: 28px;
-  height: 28px;
-  margin: -14px 0 0 -14px;
+  width: 56px;
+  height: 56px;
+  margin: -28px 0 0 -28px;
+  font-size: 44px;
   transform: rotate(var(--angle, 0deg)) translateY(-240px) rotate(calc(var(--angle, 0deg) * -1));
 }
 .planet-md {
-  width: 20px;
-  height: 20px;
-  margin: -10px 0 0 -10px;
+  width: 40px;
+  height: 40px;
+  margin: -20px 0 0 -20px;
+  font-size: 30px;
   transform: rotate(var(--angle, 0deg)) translateY(-173px) rotate(calc(var(--angle, 0deg) * -1));
 }
 .planet-sm {
-  width: 14px;
-  height: 14px;
-  margin: -7px 0 0 -7px;
+  width: 28px;
+  height: 28px;
+  margin: -14px 0 0 -14px;
+  font-size: 22px;
   transform: rotate(var(--angle, 0deg)) translateY(-101px) rotate(calc(var(--angle, 0deg) * -1));
 }
 
-/* 不同颜色的行星 */
-.planet-purple {
-  background: radial-gradient(circle at 30% 30%, #c4b5fd, #8b5cf6);
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.7), inset -4px -4px 8px rgba(0, 0, 0, 0.3);
-}
-.planet-blue {
-  background: radial-gradient(circle at 30% 30%, #93c5fd, #3b82f6);
-  box-shadow: 0 0 18px rgba(59, 130, 246, 0.7), inset -3px -3px 6px rgba(0, 0, 0, 0.3);
-}
-.planet-cyan {
-  background: radial-gradient(circle at 30% 30%, #67e8f9, #22d3ee);
-  box-shadow: 0 0 16px rgba(34, 211, 238, 0.8), inset -3px -3px 6px rgba(0, 0, 0, 0.3);
-}
-.planet-pink {
-  background: radial-gradient(circle at 30% 30%, #f9a8d4, #ec4899);
-  box-shadow: 0 0 14px rgba(236, 72, 153, 0.7), inset -2px -2px 5px rgba(0, 0, 0, 0.3);
-}
-.planet-green {
-  background: radial-gradient(circle at 30% 30%, #86efac, #22c55e);
-  box-shadow: 0 0 12px rgba(34, 197, 94, 0.7), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
-}
-.planet-orange {
-  background: radial-gradient(circle at 30% 30%, #fdba74, #f97316);
-  box-shadow: 0 0 10px rgba(249, 115, 22, 0.7), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
-}
-.planet-teal {
-  background: radial-gradient(circle at 30% 30%, #5eead4, #14b8a6);
-  box-shadow: 0 0 10px rgba(20, 184, 166, 0.7), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
-}
-.planet-violet {
-  background: radial-gradient(circle at 30% 30%, #c084fc, #a855f7);
-  box-shadow: 0 0 10px rgba(168, 85, 247, 0.7), inset -2px -2px 4px rgba(0, 0, 0, 0.3);
-}
-.planet-amber {
-  background: radial-gradient(circle at 30% 30%, #fcd34d, #f59e0b);
-  box-shadow: 0 0 8px rgba(245, 158, 11, 0.7), inset -1px -1px 3px rgba(0, 0, 0, 0.3);
-}
-
-.core {
+/* 中心太阳:透明感 + 光芒 */
+.sun {
   position: absolute;
   top: 50%;
   left: 50%;
-  width: 90px;
-  height: 90px;
-  margin: -45px 0 0 -45px;
-  border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fef3c7, #fbbf24, #f59e0b, #dc2626);
-  box-shadow:
-    0 0 40px rgba(251, 191, 36, 0.8),
-    0 0 80px rgba(249, 115, 22, 0.4),
-    inset -6px -6px 12px rgba(220, 38, 38, 0.4);
-  animation: core-pulse 4s ease-in-out infinite;
+  width: 120px;
+  height: 120px;
+  margin: -60px 0 0 -60px;
+  pointer-events: none;
 }
+
+/* 外层光晕 */
+.sun-glow {
+  position: absolute;
+  inset: -30px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(251, 191, 36, 0.35) 0%,
+    rgba(249, 115, 22, 0.18) 35%,
+    transparent 70%
+  );
+  filter: blur(20px);
+  animation: sun-breathe 4s ease-in-out infinite;
+}
+
+/* 内层半透明太阳本体 */
+.sun-core {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 100px;
+  height: 100px;
+  margin: -50px 0 0 -50px;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 35% 35%,
+    rgba(254, 243, 199, 0.9) 0%,
+    rgba(251, 191, 36, 0.75) 35%,
+    rgba(249, 115, 22, 0.55) 65%,
+    rgba(220, 38, 38, 0.35) 100%
+  );
+  box-shadow:
+    0 0 40px rgba(251, 191, 36, 0.5),
+    0 0 80px rgba(249, 115, 22, 0.3),
+    inset -6px -6px 12px rgba(220, 38, 38, 0.25);
+  animation: sun-pulse 4s ease-in-out infinite;
+}
+
+/* 4 条从太阳向外延伸的光芒线 */
+.sun-ray {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2px;
+  height: 180px;
+  margin: -90px 0 0 -1px;
+  background: linear-gradient(
+    to top,
+    transparent,
+    rgba(251, 191, 36, 0.6),
+    transparent
+  );
+  transform-origin: center center;
+  animation: sun-rotate 24s linear infinite;
+}
+.sun-ray-1 { transform: rotate(0deg); }
+.sun-ray-2 { transform: rotate(45deg); }
+.sun-ray-3 { transform: rotate(90deg); }
+.sun-ray-4 { transform: rotate(135deg); }
 
 @keyframes orbit-spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
 
-@keyframes core-pulse {
-  0%, 100% { transform: scale(1); }
-  50% { transform: scale(1.12); }
+@keyframes sun-breathe {
+  0%, 100% { opacity: 0.8; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.1); }
 }
 
-/* 移动端适配:缩小整体 */
+@keyframes sun-pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+
+@keyframes sun-rotate {
+  0% { opacity: 0.3; }
+  50% { opacity: 0.7; }
+  100% { opacity: 0.3; }
+}
+
+/* 分类分组样式 */
+.category-groups {
+  display: grid;
+  gap: 48px;
+}
+
+.category-group {
+  display: grid;
+  gap: 20px;
+}
+
+.category-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--line-soft);
+}
+
+.category-title {
+  margin: 4px 0 0;
+  font-family: var(--font-display);
+  font-size: 28px;
+  color: var(--text-primary);
+  letter-spacing: -0.02em;
+}
+
+.category-cards {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 20px;
+}
+
+.state-box.subtle {
+  padding: 16px 20px;
+  font-size: 13px;
+  color: var(--text-muted);
+}
+
+/* 移动端适配 */
+@media (max-width: 960px) {
+  .category-cards {
+    grid-template-columns: 1fr;
+  }
+}
+
 @media (max-width: 720px) {
   .hero-orbit {
     width: 320px;
@@ -460,10 +538,21 @@ a {
   .orbit-ring-lg { width: 320px; height: 320px; }
   .orbit-ring-md { width: 230px; height: 230px; }
   .orbit-ring-sm { width: 135px; height: 135px; }
-  .planet-lg { transform: rotate(var(--angle, 0deg)) translateY(-160px) rotate(calc(var(--angle, 0deg) * -1)); }
-  .planet-md { transform: rotate(var(--angle, 0deg)) translateY(-115px) rotate(calc(var(--angle, 0deg) * -1)); }
-  .planet-sm { transform: rotate(var(--angle, 0deg)) translateY(-67px) rotate(calc(var(--angle, 0deg) * -1)); }
-  .core { width: 60px; height: 60px; margin: -30px 0 0 -30px; }
+  .planet-lg {
+    width: 40px; height: 40px; margin: -20px 0 0 -20px; font-size: 32px;
+    transform: rotate(var(--angle, 0deg)) translateY(-160px) rotate(calc(var(--angle, 0deg) * -1));
+  }
+  .planet-md {
+    width: 30px; height: 30px; margin: -15px 0 0 -15px; font-size: 22px;
+    transform: rotate(var(--angle, 0deg)) translateY(-115px) rotate(calc(var(--angle, 0deg) * -1));
+  }
+  .planet-sm {
+    width: 22px; height: 22px; margin: -11px 0 0 -11px; font-size: 16px;
+    transform: rotate(var(--angle, 0deg)) translateY(-67px) rotate(calc(var(--angle, 0deg) * -1));
+  }
+  .sun { width: 80px; height: 80px; margin: -40px 0 0 -40px; }
+  .sun-core { width: 70px; height: 70px; margin: -35px 0 0 -35px; }
+  .sun-ray { height: 120px; margin-top: -60px; }
 }
 
 .section-headline {
