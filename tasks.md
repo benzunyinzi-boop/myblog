@@ -264,6 +264,39 @@
 - [ ] 编写 `README.md`:项目介绍 + 部署指南
 - [ ] git commit + push
 
+## M6 · 公开页视觉强化(已完成)
+
+### 路由与导航
+- [x] `router/index.ts` 加 `/photo` 路由
+- [x] `PublicLayout.vue` 摄影入口改 `RouterLink`
+- [x] `NavHoverPreview.vue`:导航 hover 浮层(icon 阵列 + stagger 入场 + 持续微跳)
+- [x] 触屏 / ≤960px 自动隐藏浮层
+
+### TechView 重构
+- [x] 抛弃单分类按钮,改为多分类纵向陈列
+- [x] 每分类并发拉取,最多 10 条
+- [x] 分类标题区 emoji 跳动(slug → icon 映射)
+- [x] `OrganicCard.vue`:基于 `article.id` 种子生成的有机曲线边框
+- [x] hover 卡片:虚线流动 + 上浮 + 标题渐变
+
+### AboutView 扩展
+- [x] `IdentityTyper.vue`:多身份循环打字机
+- [x] `ExperienceTimeline.vue`:systemd 风格经历时间线
+- [x] `web/src/data/experience.ts`:占位数据(待替换为真实经历)
+- [x] 联系方式前加 emoji 前缀
+
+### PhotoView 新建
+- [x] `PhotoView.vue`:标题 + filter + 瀑布流
+- [x] CSS columns 瀑布流,960/600 断点降列数
+- [x] hover 浮出 EXIF + 四角胶片孔点亮
+- [x] `web/src/data/photos.ts`:8 张 Unsplash 占位 + 4 类 tag
+
+### 验证
+- [x] `npm run build` 通过
+- [x] `/`、`/tech`、`/about`、`/photo`、`/blog/:slug`、`/admin/login` 均 200
+- [x] 无 console error(只有 Naive UI 的 provider warning,与本轮无关)
+- [x] hover 「技术」浮层渲染 6 个 icon,入场 + 微跳动画正常
+
 ## 下一步
 
 **当前状态**:M3 已完成,25/25 端到端验证全绿,所有 commit 已推送到 GitHub。

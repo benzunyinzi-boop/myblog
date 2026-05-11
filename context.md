@@ -104,15 +104,25 @@
 - 问题:新记录 `Save()` 可能带零值时间戳(`0000-00-00`),MySQL strict 模式拒绝
 - 修复:用 `clause.OnConflict + AssignmentColumns` 明确白名单字段
 
+### D15 · 导航摄影链接必须用真实路由(2026-05-11)
+- 问题:`/photo` 之前是 `<a href="#photography">` 锚点,根本不跳页
+- 修复:加 `/photo` 路由 + `PhotoView.vue`,摄影导航改 `RouterLink`
+- 附带:所有公开导航项(首页除外)hover 出现 `NavHoverPreview` 浮层,强化"可点击"的视觉反馈
+- 触屏 / ≤960px 自动隐藏浮层,避免 hover 卡死
+
+### D16 · 有机曲线卡片用 id 作种子(2026-05-11)
+- TechView 每篇文章用 `OrganicCard`,SVG path 通过 `Math.sin(id * 9301 + i * 49297)` 作种子生成
+- 好处:同一篇文章形状稳定,不同文章形状各异,无需存储额外数据
+- `preserveAspectRatio="none"` + `overflow="visible"` 让曲线能跟随卡片拉伸且外扩部分不被裁
+
+### D17 · About/Photo 数据先走前端静态 JSON(2026-05-11)
+- 经历时间线 → `web/src/data/experience.ts`
+- 摄影作品 → `web/src/data/photos.ts`(Unsplash 占位)
+- 原因:本轮优先视觉落地,后期再评估是否做后端化(加 `experiences` JSON 字段或新建 `photos` 表)
+
 ## 交接下一步
 
 下个会话如果用户说"继续",默认进入 **M4 · 前端开发**。
-
-**第一优先级(默认)**
-1. 初始化 `web/` 前端工程(Vite + Vue 3 + TS + Naive UI)
-2. 把 `docs/preview/` 的紫色科技感 CSS 迁到 `web/src/styles/`
-3. 先打通公开页面:首页 / 技术 / 关于 / 文章详情
-4. 再做后台登录页和管理页面
 
 **备选**
 - 如果用户说"跳到 M5",直接做 Docker / Nginx / 部署
