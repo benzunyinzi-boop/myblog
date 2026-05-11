@@ -2,15 +2,9 @@
   <section class="hero section-gap">
     <div class="hero-glow" />
     <div class="container hero-inner">
-      <div>
-        <div class="eyebrow"><span class="status-dot" />online · backend · decade log</div>
-        <h1 class="hero-title">
-          把分布式系统的锋利,<br />
-          写成<span class="gradient-text">可读的经验</span>。
-        </h1>
-        <p class="hero-subtitle">
-          这是一个偏工程化、也偏审美化的个人站点。十年后端开发经验,会在这里被整理成文章、分类和长期可复用的思考。
-        </p>
+      <div class="hero-left">
+        <TypingTerminal />
+
         <div class="hero-actions">
           <RouterLink class="primary-button" to="/tech">浏览技术栏目</RouterLink>
           <RouterLink class="ghost-button" to="/about">关于我</RouterLink>
@@ -140,6 +134,7 @@ import { RouterLink } from 'vue-router'
 import { useAsyncState } from '@vueuse/core'
 import { fetchPublicArticles } from '../../api/article'
 import { fetchCategories } from '../../api/meta'
+import TypingTerminal from '../../components/TypingTerminal.vue'
 
 const { state: articleState, isLoading: pending } = useAsyncState(
   () => fetchPublicArticles({ page: 1, page_size: 60 }),

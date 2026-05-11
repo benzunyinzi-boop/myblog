@@ -237,6 +237,12 @@ a {
   align-items: center;
 }
 
+.hero-left {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
 .hero-glow {
   position: absolute;
   top: 12%;
